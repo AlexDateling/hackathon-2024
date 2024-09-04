@@ -14,12 +14,12 @@ localhost:8080/client/alexsid/createPayment
 	    "Name":    "T",
 	    "Surname": "Kok",
         "BankNumber": "11111111111",
-	    "BankID": "notabsa20003",
+	    "BankID": "notabank20003",
 	    "Balance": 6.00
     },
 	"BankOwed": {
-        "ID": "notabsa20003",
-        "Name": "notabsa",
+        "ID": "notabank20003",
+        "Name": "notabank",
         "Country": "RSA"
     },
 	"Amount": 2000
