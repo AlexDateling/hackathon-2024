@@ -21,6 +21,7 @@ type Transaction struct {
 	ReceiverDetails AccountDetails `json:"receiver_details"`
 
 	Amount float64 `json:"amount"`
+	Status string  `json:"status"`
 }
 
 type AccountDetails struct {
@@ -39,124 +40,129 @@ type Bank struct {
 // InitLedger adds a base set of transactions to the ledger
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	transactions := []Transaction{
-		{	TransactionID: "1725575573618alexsid9845543456653834", 
-			ClientDetails: {
-				name: "Alex",
-				surname: "Dateling",
-				accountnumber: "0000000000",
-				bankdetails: {
-					bankid: "ABSA645334",
-					name: "ABSA",
-					country: "ZAR"
-				}
-			}, 
-			ReceiverDetails: {
-				name: "NotAlex1",
-				surname: "ASurname123",
-				accountnumber: "9845543456",
-				bankdetails: {
-					bankid: "BANKID12345",
-					name: "ABank",
-					country: "RSA"
-				}
+		{TransactionID: "1725575573618alexsid9845543456653834",
+			ClientDetails: AccountDetails{
+				Name:          "Alex",
+				Surname:       "Dateling",
+				AccountNumber: "0000000000",
+				BankDetails: Bank{
+					BankID:  "ABSA645334",
+					Name:    "ABSA",
+					Country: "ZAR",
+				},
 			},
-			Amount: 2000
+			ReceiverDetails: AccountDetails{
+				Name:          "NotAlex1",
+				Surname:       "ASurname123",
+				AccountNumber: "9845543456",
+				BankDetails: Bank{
+					BankID:  "BANKID12345",
+					Name:    "ABank",
+					Country: "RSA",
+				},
+			},
+			Amount: 2000,
+			Status: "valid",
 		},
-		{	TransactionID: "1723618alexsid984554343834", 
-			ClientDetails: {
-				name: "T",
-				surname: "T",
-				accountnumber: "11111111",
-				bankdetails: {
-					bankid: "ASDDSA",
-					name: "ABSA",
-					country: "ZAR"
-				}
-			}, 
-			ReceiverDetails: {
-				name: "vvvv",
-				surname: "assasaas",
-				accountnumber: "0877654",
-				bankdetails: {
-					bankid: "BANKID12345",
-					name: "ABank",
-					country: "RSA"
-				}
+		{TransactionID: "1723618alexsid984554343834",
+			ClientDetails: AccountDetails{
+				Name:          "T",
+				Surname:       "T",
+				AccountNumber: "11111111",
+				BankDetails: Bank{
+					BankID:  "ASDDSA",
+					Name:    "ABSA",
+					Country: "ZAR",
+				},
 			},
-			Amount: 600
+			ReceiverDetails: AccountDetails{
+				Name:          "vvvv",
+				Surname:       "assasaas",
+				AccountNumber: "0877654",
+				BankDetails: Bank{
+					BankID:  "BANKID12345",
+					Name:    "ABank",
+					Country: "RSA",
+				},
+			},
+			Amount: 600,
+			Status: "valid",
 		},
 		{
-            TransactionID: "1723618alexsid984554343834",
-            ClientDetails: {
-                Name:          "T",
-                Surname:       "T",
-                AccountNumber: "11111111",
-                BankDetails: {
-                    BankID:  "ASDDSA",
-                    Name:    "ABSA",
-                    Country: "ZAR",
-                },
-            },
-            ReceiverDetails: {
-                Name:          "vvvv",
-                Surname:       "assasaas",
-                AccountNumber: "0877654",
-                BankDetails: {
-                    BankID:  "BANKID12345",
-                    Name:    "ABank",
-                    Country: "RSA",
-                },
-            },
-            Amount: 600,
-        },
-        {
-            TransactionID: "2837465alexsid984554343835",
-            ClientDetails: {
-                Name:          "Alice",
-                Surname:       "Smith",
-                AccountNumber: "22223333",
-                BankDetails: {
-                    BankID:  "BANKXYZ",
-                    Name:    "Bank of Example",
-                    Country: "USD",
-                },
-            },
-            ReceiverDetails: {
-                Name:          "Bob",
-                Surname:       "Jones",
-                AccountNumber: "7654321",
-                BankDetails: {
-                    BankID:  "BANKXYZ678",
-                    Name:    "Another Bank",
-                    Country: "US",
-                },
-            },
-            Amount: 1500,
-        },
-        {
-            TransactionID: "3948576alexsid984554343836",
-            ClientDetails: {
-                Name:          "John",
-                Surname:       "Doe",
-                AccountNumber: "33334444",
-                BankDetails: {
-                    BankID:  "XYZ123",
-                    Name:    "Global Bank",
-                    Country: "GBP",
-                },
-            },
-            ReceiverDetails: {
-                Name:          "Jane",
-                Surname:       "Doe",
-                AccountNumber: "43211234",
-                BankDetails: {
-                    BankID:  "XYZ456",
-                    Name:    "Regional Bank",
-                    Country: "GB",
-                },
-            },
-            Amount: 2500,
-        }
+			TransactionID: "1723618alexsid984554343834",
+			ClientDetails: AccountDetails{
+				Name:          "T",
+				Surname:       "T",
+				AccountNumber: "11111111",
+				BankDetails: Bank{
+					BankID:  "ASDDSA",
+					Name:    "ABSA",
+					Country: "ZAR",
+				},
+			},
+			ReceiverDetails: AccountDetails{
+				Name:          "vvvv",
+				Surname:       "assasaas",
+				AccountNumber: "0877654",
+				BankDetails: Bank{
+					BankID:  "BANKID12345",
+					Name:    "ABank",
+					Country: "RSA",
+				},
+			},
+			Amount: 600,
+			Status: "valid",
+		},
+		{
+			TransactionID: "2837465alexsid984554343835",
+			ClientDetails: AccountDetails{
+				Name:          "Alice",
+				Surname:       "Smith",
+				AccountNumber: "22223333",
+				BankDetails: Bank{
+					BankID:  "BANKXYZ",
+					Name:    "Bank of Example",
+					Country: "USD",
+				},
+			},
+			ReceiverDetails: AccountDetails{
+				Name:          "Bob",
+				Surname:       "Jones",
+				AccountNumber: "7654321",
+				BankDetails: Bank{
+					BankID:  "BANKXYZ678",
+					Name:    "Another Bank",
+					Country: "US",
+				},
+			},
+			Amount: 1500,
+			Status: "completed",
+		},
+		{
+			TransactionID: "3948576alexsid984554343836",
+			ClientDetails: AccountDetails{
+				Name:          "John",
+				Surname:       "Doe",
+				AccountNumber: "33334444",
+				BankDetails: Bank{
+					BankID:  "XYZ123",
+					Name:    "Global Bank",
+					Country: "GBP",
+				},
+			},
+			ReceiverDetails: AccountDetails{
+				Name:          "Jane",
+				Surname:       "Doe",
+				AccountNumber: "43211234",
+				BankDetails: Bank{
+					BankID:  "XYZ456",
+					Name:    "Regional Bank",
+					Country: "GB",
+				},
+			},
+			Amount: 2500,
+			Status: "completed",
+		},
 	}
 
 	for _, transaction := range transactions {
@@ -174,7 +180,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 
-func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInterface, transactionId string, clientDetails AccountDetails, receiverDetails AccountDetails, amount float64, ) error {
+func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInterface, transactionId string, clientDetails AccountDetails, receiverDetails AccountDetails, amount float64) error {
 	exists, err := s.TransactionExists(ctx, transactionId)
 	if err != nil {
 		return err
@@ -184,10 +190,10 @@ func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInte
 	}
 
 	transaction := Transaction{
-		TransactionID:             transactionId,
-		ClientDetails:          clientDetails,
-		ReceiverDetails:           receiverDetails,
-		Amount:          amount
+		TransactionID:   transactionId,
+		ClientDetails:   clientDetails,
+		ReceiverDetails: receiverDetails,
+		Amount:          amount,
 	}
 
 	transactionJSON, err := json.Marshal(transaction)
@@ -200,12 +206,12 @@ func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInte
 
 // ReadTransaction returns the transaction stored in the world state with given id.
 func (s *SmartContract) ReadTransaction(ctx contractapi.TransactionContextInterface, transactionId string) (*Transaction, error) {
-	transactionJSON, err := ctx.GetStub().GetState(id)
+	transactionJSON, err := ctx.GetStub().GetState(transactionId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read from world state: %v", err)
 	}
 	if transactionJSON == nil {
-		return nil, fmt.Errorf("the transaction %s does not exist", id)
+		return nil, fmt.Errorf("the transaction %s does not exist", transactionId)
 	}
 
 	var transaction Transaction
@@ -227,10 +233,9 @@ func (s *SmartContract) UpdateTransaction(ctx contractapi.TransactionContextInte
 		return fmt.Errorf("the transaction %s does not exist", transactionId)
 	}
 
-	transaction, err := s.ReadTransaction((ctx,transactionId))
+	transaction, err := s.ReadTransaction(ctx, transactionId)
 
 	// CHANGE STATUS of PAYLOAD
-	
 
 	// overwriting original asset with new asset
 	// asset := Asset{
@@ -271,7 +276,6 @@ func (s *SmartContract) TransactionExists(ctx contractapi.TransactionContextInte
 
 	return transactionJSON != nil, nil
 }
-
 
 // GetAllTransactions returns all transactions found in world state
 func (s *SmartContract) GetAllTransactions(ctx contractapi.TransactionContextInterface) ([]*Transaction, error) {

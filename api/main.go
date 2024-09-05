@@ -37,6 +37,7 @@ type transaction struct {
 	ReceiverDetails AccountDetails `json:"receiver_details"`
 
 	Amount float64 `json:"amount"`
+	Status string  `json:"status"`
 }
 
 type AccountDetails struct {
@@ -180,6 +181,7 @@ func createPayment(c *gin.Context) {
 		}
 		newTransaction.ReceiverDetails = newPayload.ReceiverDetails
 		newTransaction.Amount = newPayload.Amount
+		newTransaction.Status = "initiated"
 
 		fmt.Println("XXXXXXXXXXXXXX")
 		fmt.Println(newTransaction)
