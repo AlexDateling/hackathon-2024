@@ -101,9 +101,9 @@ func checkBalance(AccountHolder Client, amount float64) (result bool) {
 }
 
 // send transaction to chaincode
-func sendtoChaincode(newTransaction transaction) (result bool) {
+// func sendtoChaincode(newTransaction transaction) (result bool) {
 
-}
+// }
 
 /////////////////////////////////// MOCK DATA FUNCTIONS
 
@@ -184,7 +184,7 @@ func createPayment(c *gin.Context) {
 		fmt.Println("XXXXXXXXXXXXXX")
 		fmt.Println(newTransaction)
 
-		sendtoChaincode()
+		// sendtoChaincode()
 		c.IndentedJSON(http.StatusCreated, newTransaction)
 	} else {
 		c.IndentedJSON(http.StatusBadRequest, `{"status": "failed"}`)
