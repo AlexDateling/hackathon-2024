@@ -20,6 +20,13 @@ INPROGRESS
 COMPLETED
 INVALID???
 
+
+
+NEED TO DO:
+Ensure you have a connection profile for your Fabric network (usually a YAML file).
+You'll need to have a wallet with the necessary identities to interact with the network.
+
+
 Ref
 https://hyperledger-fabric.readthedocs.io/en/release-1.4/chaincode4ade.html
 https://github.com/hyperledger/fabric-samples
