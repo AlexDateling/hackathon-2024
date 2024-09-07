@@ -13,6 +13,13 @@ Normally chaincodes are started and maintained by peer. However in “dev mode�
 We start “dev mode” by leveraging pre-generated orderer and channel artifacts for a sample dev network. As such, the user can immediately jump into the process of compiling chaincode and driving calls.
 
 
+TRANSACTION STATUSES
+
+PENDING
+INPROGRESS
+COMPLETED
+INVALID
+
 Ref
 https://hyperledger-fabric.readthedocs.io/en/release-1.4/chaincode4ade.html
 https://github.com/hyperledger/fabric-samples

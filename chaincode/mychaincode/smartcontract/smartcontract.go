@@ -20,8 +20,10 @@ type Transaction struct {
 	ClientDetails   AccountDetails `json:"client_details"`
 	ReceiverDetails AccountDetails `json:"receiver_details"`
 
-	Amount float64 `json:"amount"`
-	Status string  `json:"status"`
+	Amount         float64 `json:"amount"`
+	Status         string  `json:"status"`
+	ClientStatus   string  `json:"clientstatus"`
+	ReceiverStatus string  `json:"receiverstatus"`
 }
 
 type AccountDetails struct {
@@ -61,8 +63,10 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 					Country: "RSA",
 				},
 			},
-			Amount: 2000,
-			Status: "valid",
+			Amount:         2000,
+			Status:         "PENDING",
+			ClientStatus:   "PENDING",
+			ReceiverStatus: "PENDING",
 		},
 		{TransactionID: "1723618alexsid984554343834",
 			ClientDetails: AccountDetails{
@@ -85,8 +89,10 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 					Country: "RSA",
 				},
 			},
-			Amount: 600,
-			Status: "valid",
+			Amount:         600,
+			Status:         "PENDING",
+			ClientStatus:   "SETTLED",
+			ReceiverStatus: "PENDING",
 		},
 		{
 			TransactionID: "1723618alexsid984554343834",
@@ -110,8 +116,10 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 					Country: "RSA",
 				},
 			},
-			Amount: 600,
-			Status: "valid",
+			Amount:         600,
+			Status:         "PENDING",
+			ClientStatus:   "PENDING",
+			ReceiverStatus: "SETTLED",
 		},
 		{
 			TransactionID: "2837465alexsid984554343835",
@@ -135,8 +143,10 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 					Country: "US",
 				},
 			},
-			Amount: 1500,
-			Status: "completed",
+			Amount:         1500,
+			Status:         "SETTLED",
+			ClientStatus:   "SETTLED",
+			ReceiverStatus: "SETTLED",
 		},
 		{
 			TransactionID: "3948576alexsid984554343836",
@@ -160,8 +170,10 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 					Country: "GB",
 				},
 			},
-			Amount: 2500,
-			Status: "completed",
+			Amount:         2500,
+			Status:         "SETTLED",
+			ClientStatus:   "SETTLED",
+			ReceiverStatus: "SETTLED",
 		},
 	}
 
@@ -234,7 +246,9 @@ func (s *SmartContract) UpdateTransaction(ctx contractapi.TransactionContextInte
 	}
 
 	transaction, err := s.ReadTransaction(ctx, transactionId)
-
+	if err != nil {
+		return err
+	}
 	// CHANGE STATUS of PAYLOAD
 
 	// overwriting original asset with new asset
@@ -303,4 +317,113 @@ func (s *SmartContract) GetAllTransactions(ctx contractapi.TransactionContextInt
 	}
 
 	return transactions, nil
+}
+
+// Once a week batch call, bank will grab all payment transactions with their ID and then return those transactions
+func (s *SmartContract) SettlePaymentTransactions(ctx contractapi.TransactionContextInterface, bankID string) ([]*Transaction, error) {
+
+	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	var transactions []*Transaction
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		var transaction Transaction
+		err = json.Unmarshal(queryResponse.Value, &transaction)
+		if err != nil {
+			return nil, err
+		}
+		// Get all pending transactions
+		if transaction.Status == "PENDING" {
+			// Check which transaction is the bank that called it, need some sort of authorization aswell
+			if transaction.ClientDetails.BankDetails.BankID == bankID {
+				transactions = append(transactions, &transaction)
+			}
+		}
+
+		// UPDATE CLIENT DETAILS OF BANK THAT CALLED API TO "SETTLED"
+		// PLEASE CHECK IF THIS IS BYREF
+		for _, transaction := range transactions {
+			transaction.ClientStatus = "SETTLED"
+
+			// if both receiver and payment transaction statuses are setled transaction is regarded as completed.
+			if transaction.ReceiverStatus == "SETTLED" && transaction.ClientStatus == "SETTLED" {
+				transaction.Status = "COMPLETED"
+			}
+
+			transactionJSON, err := json.Marshal(transaction)
+			if err != nil {
+				return transactions, err
+			}
+			err = ctx.GetStub().PutState(transaction.TransactionID, transactionJSON)
+			if err != nil {
+				return transactions, err
+			}
+		}
+	}
+
+	// returns the transactions for the bank to do whatever they want with it
+	return transactions, nil
+}
+
+// Once a week batch call, bank will grab all transactions with their ID and then return those transactions
+func (s *SmartContract) SettleReceiveTransactions(ctx contractapi.TransactionContextInterface, bankID string) ([]*Transaction, error) {
+
+	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	var transactions []*Transaction
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		var transaction Transaction
+		err = json.Unmarshal(queryResponse.Value, &transaction)
+		if err != nil {
+			return nil, err
+		}
+		// Get all pending transactions
+		if transaction.Status == "PENDING" || transaction.Status == "INPROGRESS" {
+			// Check which transaction is the bank that called it, need some sort of authorization aswell
+			if transaction.ReceiverDetails.BankDetails.BankID == bankID {
+				transactions = append(transactions, &transaction)
+			}
+		}
+
+		// UPDATE CLIENT DETAILS OF BANK THAT CALLED API TO "SETTLED"
+		// PLEASE CHECK IF THIS IS BYREF
+		for _, transaction := range transactions {
+			transaction.ReceiverStatus = "SETTLED"
+
+			// if both receiver and payment transaction statuses are setled transaction is regarded as completed.
+			if transaction.ReceiverStatus == "SETTLED" && transaction.ClientStatus == "SETTLED" {
+				transaction.Status = "COMPLETED"
+			} else {
+				transaction.Status = "INPROGRESS"
+			}
+
+			transactionJSON, err := json.Marshal(transaction)
+			if err != nil {
+				return transactions, err
+			}
+			err = ctx.GetStub().PutState(transaction.TransactionID, transactionJSON)
+			if err != nil {
+				return transactions, err
+			}
+		}
+	}
+
+	return transactions, err
 }
