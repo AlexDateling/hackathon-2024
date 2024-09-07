@@ -2,15 +2,26 @@ package main
 
 import (
 	"crypto/rand"
+	"encoding/json"
 	"example/web-service-gin/docs"
 	"fmt"
 	"math/big"
 	"net/http"
+	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin" // swagger embed files
+	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
+	"github.com/hyperledger/fabric-sdk-go/pkg/gateway"
 	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	ginSwagger "github.com/swaggo/gin-swagger"
+	// gin-swagger middleware
+)
+
+const (
+	channelName   = "mychannel"
+	chaincodeName = "asset-transfer"
 )
 
 // Bank Mock Code of client Data //
@@ -31,7 +42,7 @@ type Bank struct {
 ///////////////////////////////////
 
 // send this to smart contract
-type transaction struct {
+type Transaction struct {
 	TransactionID   string         `json:"transaction_id"`
 	ClientDetails   AccountDetails `json:"client_details"`
 	ReceiverDetails AccountDetails `json:"receiver_details"`
@@ -137,6 +148,13 @@ func getBank(bankId string) (result Bank) {
 func createPayment(c *gin.Context) {
 	clientid := c.Param("clientid")
 
+	// create connection to hyperledger fabric I think???
+	contract, err := getContract()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	var newPayload payload
 
 	// Call BindJSON to bind the received JSON to
@@ -161,7 +179,7 @@ func createPayment(c *gin.Context) {
 	fmt.Println(clientBank)
 
 	// Need to generate a proper reference
-	transaction_id, err := generateTransactionReference(loginClient.ID, newPayload.ReceiverDetails.AccountNumber)
+	transaction_id, err = generateTransactionReference(loginClient.ID, newPayload.ReceiverDetails.AccountNumber)
 	if err != nil {
 		fmt.Println("Error generating reference number:", err)
 		return
@@ -169,7 +187,7 @@ func createPayment(c *gin.Context) {
 
 	fmt.Println(transaction_id)
 
-	var newTransaction transaction
+	var newTransaction Transaction
 
 	var isEnough bool = checkBalance(loginClient, newPayload.Amount)
 
@@ -190,6 +208,36 @@ func createPayment(c *gin.Context) {
 		fmt.Println("XXXXXXXXXXXXXX")
 		fmt.Println(newTransaction)
 
+		clientdetails, err := json.Marshal(newTransaction.ClientDetails)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		receiverdetails, err := json.Marshal(newTransaction.ReceiverDetails)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, err = contract.SubmitTransaction("CreateTransaction", newTransaction.TransactionID, string(clientdetails), string(receiverdetails), strconv.FormatFloat(newTransaction.Amount, 'f', 2, 64), newTransaction.Status, newTransaction.ClientStatus, newTransaction.ReceiverStatus)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		newtransaction, err := json.Marshal(newTransaction)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, err = contract.SubmitTransaction("CreateTransaction2", string(newtransaction))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
 		// sendtoChaincode()
 		c.IndentedJSON(http.StatusCreated, newTransaction)
 	} else {
@@ -197,26 +245,107 @@ func createPayment(c *gin.Context) {
 	}
 }
 
-// Send to chaincode
-// func sendLedger(c *gin.Context) {
-// 	c.IndentedJSON(http.StatusOK, albums)
-// }
+func SettlePaymentTransactions(c *gin.Context) {
+	bankid := c.Param("bankid")
 
-// // getAlbums responds with the list of all albums as JSON.
-// func validateTransaction(c *gin.Context) {
-// 	c.IndentedJSON(http.StatusOK, albums)
-// }
+	// create connection to hyperledger fabric I think???
+	contract, err := getContract()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	var transactions []*Transaction
+	transactionsBytes, err := contract.SubmitTransaction("SettlePaymentTransactions", bankid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	json.Unmarshal(transactionsBytes, &transactions)
+	fmt.Println(transactions)
+}
 
-// // getAlbums responds with the list of all albums as JSON.
-// func postTransactionSmartContract(c *gin.Context) {
-// 	c.IndentedJSON(http.StatusOK, albums)
-// }
+func SettleReceiveTransactions(c *gin.Context) {
+	bankid := c.Param("bankid")
+
+	// create connection to hyperledger fabric I think???
+	contract, err := getContract()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	var transactions []*Transaction
+	transactionsBytes, err := contract.SubmitTransaction("SettleReceiveTransactions", bankid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	json.Unmarshal(transactionsBytes, &transactions)
+	fmt.Println(transactions)
+}
+
+func GetAllTransactions(c *gin.Context) {
+	// create connection to hyperledger fabric I think???
+	contract, err := getContract()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	var transactions []*Transaction
+	transactionsBytes, err := contract.SubmitTransaction("GetAllTransactions")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	json.Unmarshal(transactionsBytes, &transactions)
+	fmt.Println(transactions)
+}
+
+func getContract() (*gateway.Contract, error) {
+	wallet, err := gateway.NewFileSystemWallet("wallet")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create wallet: %v", err)
+	}
+
+	if !wallet.Exists("appUser") {
+		return nil, fmt.Errorf("failed to get appUser")
+	}
+
+	ccpPath := filepath.Join(
+		"..",
+		"..",
+		"test-network",
+		"organizations",
+		"peerOrganizations",
+		"org1.example.com",
+		"connection-org1.yaml",
+	)
+
+	gw, err := gateway.Connect(
+		gateway.WithConfig(config.FromFile(filepath.Clean(ccpPath))),
+		gateway.WithIdentity(wallet, "appUser"),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to gateway: %v", err)
+	}
+	defer gw.Close()
+
+	network, err := gw.GetNetwork(channelName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get network: %v", err)
+	}
+
+	contract := network.GetContract(chaincodeName)
+	return contract, nil
+}
 
 func main() {
 
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	router := gin.Default()
 	router.POST("client/:clientid/createPayment", createPayment)
+	router.POST("SettlePaymentTransactions/:bankid", SettlePaymentTransactions)
+	router.POST("SettleReceiveTransactions/:bankid", SettleReceiveTransactions)
+	router.GET("GetAllTransactions/", GetAllTransactions)
 	// Swagger UI
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.Run("localhost:8080")

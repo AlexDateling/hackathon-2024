@@ -18,7 +18,7 @@ TRANSACTION STATUSES
 PENDING
 INPROGRESS
 COMPLETED
-INVALID
+INVALID???
 
 Ref
 https://hyperledger-fabric.readthedocs.io/en/release-1.4/chaincode4ade.html

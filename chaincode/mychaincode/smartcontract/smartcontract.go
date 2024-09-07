@@ -192,12 +192,13 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 
-func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInterface, transactionId string, clientDetails AccountDetails, receiverDetails AccountDetails, amount float64) error {
+func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInterface, transactionId string, clientDetails AccountDetails, receiverDetails AccountDetails, amount float64, status string, clientstatus string, receiverstatus string) error {
 	exists, err := s.TransactionExists(ctx, transactionId)
 	if err != nil {
 		return err
 	}
 	if exists {
+
 		return fmt.Errorf("the transaction %s already exists", transactionId)
 	}
 
@@ -206,6 +207,9 @@ func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInte
 		ClientDetails:   clientDetails,
 		ReceiverDetails: receiverDetails,
 		Amount:          amount,
+		Status:          status,
+		ClientStatus:    clientstatus,
+		ReceiverStatus:  receiverstatus,
 	}
 
 	transactionJSON, err := json.Marshal(transaction)
@@ -214,6 +218,24 @@ func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInte
 	}
 
 	return ctx.GetStub().PutState(transactionId, transactionJSON)
+}
+
+func (s *SmartContract) CreateTransaction2(ctx contractapi.TransactionContextInterface, transaction Transaction) error {
+	exists, err := s.TransactionExists(ctx, transaction.TransactionID)
+	if err != nil {
+		return err
+	}
+	if exists {
+
+		return fmt.Errorf("the transaction %s already exists", transaction.TransactionID)
+	}
+
+	transactionJSON, err := json.Marshal(transaction)
+	if err != nil {
+		return err
+	}
+
+	return ctx.GetStub().PutState(transaction.TransactionID, transactionJSON)
 }
 
 // ReadTransaction returns the transaction stored in the world state with given id.
@@ -249,16 +271,6 @@ func (s *SmartContract) UpdateTransaction(ctx contractapi.TransactionContextInte
 	if err != nil {
 		return err
 	}
-	// CHANGE STATUS of PAYLOAD
-
-	// overwriting original asset with new asset
-	// asset := Asset{
-	// 	ID:             id,
-	// 	Color:          color,
-	// 	Size:           size,
-	// 	Owner:          owner,
-	// 	AppraisedValue: appraisedValue,
-	// }
 	transactionJSON, err := json.Marshal(transaction)
 	if err != nil {
 		return err
