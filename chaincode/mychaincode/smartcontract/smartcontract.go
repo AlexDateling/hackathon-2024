@@ -331,8 +331,59 @@ func (s *SmartContract) GetAllTransactions(ctx contractapi.TransactionContextInt
 	return transactions, nil
 }
 
+// ADHOC Settlement
+func (s *SmartContract) AdhocSettlePaymentTransactions(ctx contractapi.TransactionContextInterface, transactionId string) (*Transaction, error) {
+	transaction, err := s.ReadTransaction(ctx, transactionId)
+	if err != nil {
+		return nil, err
+	}
+
+	transaction.ClientStatus = "SETTLED"
+
+	// if both receiver and payment transaction statuses are setled transaction is regarded as completed.
+	if transaction.ReceiverStatus == "SETTLED" && transaction.ClientStatus == "SETTLED" {
+		transaction.Status = "COMPLETED"
+	}
+
+	transactionJSON, err := json.Marshal(transaction)
+	if err != nil {
+		return transaction, err
+	}
+	err = ctx.GetStub().PutState(transaction.TransactionID, transactionJSON)
+	if err != nil {
+		return transaction, err
+	}
+	// returns the transactions for the bank to do whatever they want with it
+	return transaction, nil
+}
+
+func (s *SmartContract) AdhocSettleReceiveTransactions(ctx contractapi.TransactionContextInterface, transactionId string) (*Transaction, error) {
+	transaction, err := s.ReadTransaction(ctx, transactionId)
+	if err != nil {
+		return nil, err
+	}
+
+	transaction.ReceiverStatus = "SETTLED"
+
+	// if both receiver and payment transaction statuses are setled transaction is regarded as completed.
+	if transaction.ReceiverStatus == "SETTLED" && transaction.ClientStatus == "SETTLED" {
+		transaction.Status = "COMPLETED"
+	}
+
+	transactionJSON, err := json.Marshal(transaction)
+	if err != nil {
+		return transaction, err
+	}
+	err = ctx.GetStub().PutState(transaction.TransactionID, transactionJSON)
+	if err != nil {
+		return transaction, err
+	}
+	// returns the transactions for the bank to do whatever they want with it
+	return transaction, nil
+}
+
 // Once a week batch call, bank will grab all payment transactions with their ID and then return those transactions
-func (s *SmartContract) SettlePaymentTransactions(ctx contractapi.TransactionContextInterface, bankID string) ([]*Transaction, error) {
+func (s *SmartContract) BatchSettlePaymentTransactions(ctx contractapi.TransactionContextInterface, bankID string) ([]*Transaction, error) {
 
 	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
 	if err != nil {
@@ -386,7 +437,7 @@ func (s *SmartContract) SettlePaymentTransactions(ctx contractapi.TransactionCon
 }
 
 // Once a week batch call, bank will grab all transactions with their ID and then return those transactions
-func (s *SmartContract) SettleReceiveTransactions(ctx contractapi.TransactionContextInterface, bankID string) ([]*Transaction, error) {
+func (s *SmartContract) BatchSettleReceiveTransactions(ctx contractapi.TransactionContextInterface, bankID string) ([]*Transaction, error) {
 
 	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
 	if err != nil {

@@ -72,3 +72,6 @@ network-debug.log
 build/
 bin/
 *.tgz
+
+
+package-lock.json

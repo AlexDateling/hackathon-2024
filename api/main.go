@@ -208,12 +208,13 @@ func createPayment(c *gin.Context) {
 		fmt.Println("XXXXXXXXXXXXXX")
 		fmt.Println(newTransaction)
 
+		// convert to string SubmitTransaction only allows for strings
 		clientdetails, err := json.Marshal(newTransaction.ClientDetails)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-
+		// convert to string SubmitTransaction only allows for strings
 		receiverdetails, err := json.Marshal(newTransaction.ReceiverDetails)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -226,6 +227,7 @@ func createPayment(c *gin.Context) {
 			return
 		}
 
+		// convert to string SubmitTransaction only allows for strings
 		newtransaction, err := json.Marshal(newTransaction)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
