@@ -50,7 +50,6 @@ export class Transaction {
   clientstatus: string;
   @ApiProperty()
   receiverstatus: string;
-    newTransaction: { name: string; surname: any; };
 }
 
 export class Payload {
