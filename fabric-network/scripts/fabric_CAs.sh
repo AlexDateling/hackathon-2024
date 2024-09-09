@@ -8,9 +8,9 @@
 function launch_ECert_CAs() {
   push_fn "Launching Fabric CAs"
 
-  apply_template kube/sarb/sarb-ca.yaml $SARB_NS
-  apply_template kube/absa/absa-ca.yaml $ABSA_NS
-  apply_template kube/crossborder/crossborder-ca.yaml $CROSSBORDER_NS
+  apply_template manifests/sarb/sarb-ca.yaml $SARB_NS
+  apply_template manifests/absa/absa-ca.yaml $ABSA_NS
+  apply_template manifests/crossborder/crossborder-ca.yaml $CROSSBORDER_NS
 
   kubectl -n $SARB_NS rollout status deploy/sarb-ca
   kubectl -n $ABSA_NS rollout status deploy/absa-ca
@@ -28,17 +28,17 @@ function init_tls_cert_issuers() {
 
   # Create a self-signing certificate issuer / root TLS certificate for the blockchain.
   # TODO : Bring-Your-Own-Key - allow the network bootstrap to read an optional ECDSA key pair for the TLS trust root CA.
-  kubectl -n $SARB_NS apply -f kube/root-tls-cert-issuer.yaml
+  kubectl -n $SARB_NS apply -f manifests/root-tls-cert-issuer.yaml
   kubectl -n $SARB_NS wait --timeout=30s --for=condition=Ready issuer/root-tls-cert-issuer
-  kubectl -n $ABSA_NS apply -f kube/root-tls-cert-issuer.yaml
+  kubectl -n $ABSA_NS apply -f manifests/root-tls-cert-issuer.yaml
   kubectl -n $ABSA_NS wait --timeout=30s --for=condition=Ready issuer/root-tls-cert-issuer
-  kubectl -n $CROSSBORDER_NS apply -f kube/root-tls-cert-issuer.yaml
+  kubectl -n $CROSSBORDER_NS apply -f manifests/root-tls-cert-issuer.yaml
   kubectl -n $CROSSBORDER_NS wait --timeout=30s --for=condition=Ready issuer/root-tls-cert-issuer
 
   # Use the self-signing issuer to generate three Issuers, one for each org.
-  kubectl -n $SARB_NS apply -f kube/sarb/sarb-tls-cert-issuer.yaml
-  kubectl -n $ABSA_NS apply -f kube/absa/absa-tls-cert-issuer.yaml
-  kubectl -n $CROSSBORDER_NS apply -f kube/crossborder/crossborder-tls-cert-issuer.yaml
+  kubectl -n $SARB_NS apply -f manifests/sarb/sarb-tls-cert-issuer.yaml
+  kubectl -n $ABSA_NS apply -f manifests/absa/absa-tls-cert-issuer.yaml
+  kubectl -n $CROSSBORDER_NS apply -f manifests/crossborder/crossborder-tls-cert-issuer.yaml
 
   kubectl -n $SARB_NS wait --timeout=30s --for=condition=Ready issuer/sarb-tls-cert-issuer
   kubectl -n $ABSA_NS wait --timeout=30s --for=condition=Ready issuer/absa-tls-cert-issuer

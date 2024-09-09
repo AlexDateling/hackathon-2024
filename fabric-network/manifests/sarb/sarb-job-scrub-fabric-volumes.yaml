@@ -24,9 +24,9 @@ spec:
             - -c
             - "rm -rvf /mnt/fabric-*/*"
           volumeMounts:
-            - name: fabric-org0-volume
-              mountPath: /mnt/fabric-org0
+            - name: fabric-sarb-volume
+              mountPath: /mnt/fabric-sarb
       volumes:
-        - name: fabric-org0-volume
+        - name: fabric-sarb-volume
           persistentVolumeClaim:
-            claimName: fabric-org0
+            claimName: fabric-sarb

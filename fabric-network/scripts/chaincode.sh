@@ -296,14 +296,14 @@ function launch_chaincode_service() {
   # The chaincode endpoint needs to have the generated chaincode ID available in the environment.
   # This could be from a config map, a secret, or by directly editing the deployment spec.  Here we'll keep
   # things simple by using sed to substitute script variables into a yaml template.
-  cat kube/${org}/${org}-cc-template.yaml \
+  cat manifests/${org}/${org}-cc-template.yaml \
     | sed 's,{{CHAINCODE_NAME}},'${cc_name}',g' \
     | sed 's,{{CHAINCODE_ID}},'${cc_id}',g' \
     | sed 's,{{CHAINCODE_IMAGE}},'${cc_image}',g' \
     | sed 's,{{PEER_NAME}},'${peer}',g' \
-    | exec kubectl -n $ORG1_NS apply -f -
+    | exec kubectl -n $ABSA_NS apply -f -
 
-  kubectl -n $ORG1_NS rollout status deploy/${org}${peer}-ccaas-${cc_name}
+  kubectl -n $ABSA_NS rollout status deploy/${org}${peer}-ccaas-${cc_name}
 
   pop_fn
 }

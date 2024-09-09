@@ -92,7 +92,7 @@ function apply_template() {
 # todo: Expose the output of this function to a target that prints the context to STDOUT.
 #
 # e.g.:
-# bash $ source $(network set-peer-context org1 peer2)
+# bash $ source $(network set-peer-context absa peer2)
 # bash $ peer chaincode list
 # bash $ ...
 function export_peer_context() {

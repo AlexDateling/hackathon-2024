@@ -1,8 +1,8 @@
 resources:
-  - ca.yaml
-  - cc-template.yaml
-  - install-k8s-builder.yaml
-  - job-scrub-fabric-volumes.yaml
-  - peer1.yaml
-  - peer2.yaml
-  - tls-cert-issuer.yaml
+  - absa-ca.yaml
+  - absa-cc-template.yaml
+  - absa-install-k8s-builder.yaml
+  - absa-job-scrub-fabric-volumes.yaml
+  - absa-peer1.yaml
+  - absa-peer2.yaml
+  - absa-tls-cert-issuer.yaml

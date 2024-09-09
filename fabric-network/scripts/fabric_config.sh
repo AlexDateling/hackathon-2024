@@ -39,9 +39,9 @@ function init_storage_volumes() {
     exit 1
   fi
 
-  cat kube/pvc-fabric-org0.yaml | envsubst | kubectl -n $SARB_NS create -f - || true
-  cat kube/pvc-fabric-org1.yaml | envsubst | kubectl -n $ABSA_NS create -f - || true
-  cat kube/pvc-fabric-org2.yaml | envsubst | kubectl -n $CROSSBORDER_NS create -f - || true
+  cat manifests/pvc-fabric-sarb.yaml | envsubst | kubectl -n $SARB_NS create -f - || true
+  cat manifests/pvc-fabric-absa.yaml | envsubst | kubectl -n $ABSA_NS create -f - || true
+  cat manifests/pvc-fabric-crossborder.yaml | envsubst | kubectl -n $CROSSBORDER_NS create -f - || true
 
   pop_fn
 }
@@ -49,13 +49,13 @@ function init_storage_volumes() {
 function load_org_config() {
   push_fn "Creating fabric config maps"
 
-  kubectl -n $SARB_NS delete configmap org0-config || true
-  kubectl -n $ABSA_NS delete configmap org1-config || true
-  kubectl -n $CROSSBORDER_NS delete configmap org2-config || true
+  kubectl -n $SARB_NS delete configmap sarb-config || true
+  kubectl -n $ABSA_NS delete configmap absa-config || true
+  kubectl -n $CROSSBORDER_NS delete configmap crossborder-config || true
 
-  kubectl -n $SARB_NS create configmap org0-config --from-file=config/org0
-  kubectl -n $ABSA_NS create configmap org1-config --from-file=config/org1
-  kubectl -n $CROSSBORDER_NS create configmap org2-config --from-file=config/org2
+  kubectl -n $SARB_NS create configmap sarb-config --from-file=config/sarb
+  kubectl -n $ABSA_NS create configmap absa-config --from-file=config/absa
+  kubectl -n $CROSSBORDER_NS create configmap crossborder-config --from-file=config/crossborder
 
   pop_fn
 }
@@ -63,8 +63,8 @@ function load_org_config() {
 function apply_k8s_builder_roles() {
   push_fn "Applying k8s chaincode builder roles"
 
-  apply_template kube/fabric-builder-role.yaml $ABSA_NS
-  apply_template kube/fabric-builder-rolebinding.yaml $ABSA_NS
+  apply_template manifests/fabric-builder-role.yaml $ABSA_NS
+  apply_template manifests/fabric-builder-rolebinding.yaml $ABSA_NS
 
   pop_fn
 }
@@ -72,11 +72,11 @@ function apply_k8s_builder_roles() {
 function apply_k8s_builders() {
   push_fn "Installing k8s chaincode builders"
 
-  apply_template kube/org1/org1-install-k8s-builder.yaml $ABSA_NS
-  apply_template kube/org2/org2-install-k8s-builder.yaml $CROSSBORDER_NS
+  apply_template manifests/absa/absa-install-k8s-builder.yaml $ABSA_NS
+  apply_template manifests/crossborder/crossborder-install-k8s-builder.yaml $CROSSBORDER_NS
 
-  kubectl -n $ABSA_NS wait --for=condition=complete --timeout=60s job/org1-install-k8s-builder
-  kubectl -n $CROSSBORDER_NS wait --for=condition=complete --timeout=60s job/org2-install-k8s-builder
+  kubectl -n $ABSA_NS wait --for=condition=complete --timeout=60s job/absa-install-k8s-builder
+  kubectl -n $CROSSBORDER_NS wait --for=condition=complete --timeout=60s job/crossborder-install-k8s-builder
 
   pop_fn
 }

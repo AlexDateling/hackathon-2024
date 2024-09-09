@@ -1,8 +1,8 @@
 {
-    "name": "${NS}-org${ORG}",
+    "name": "${NS}-${ORG}",
     "version": "1.0.0",
     "client": {
-        "organization": "Org${ORG}",
+        "organization": "${ORG}",
         "connection": {
             "timeout": {
                 "peer": {
@@ -15,29 +15,29 @@
         "Org${ORG}": {
             "mspid": "Org${ORG}MSP",
             "peers": [
-                "org${ORG}-peers"
+                "${ORG}-peers"
             ],
             "certificateAuthorities": [
-                "org${ORG}-ca"
+                "${ORG}-ca"
             ]
         }
     },
     "peers": {
-        "org${ORG}-peers": {
-            "url": "grpcs://org${ORG}-peer1.${NS}.svc.cluster.local:7051",
+        "${ORG}-peers": {
+            "url": "grpcs://${ORG}-peer1.${NS}.svc.cluster.local:7051",
             "tlsCACerts": {
                 "pem": "${PEERPEM}"
             },
             "grpcOptions": {
-                "ssl-target-name-override": "org${ORG}-peer1.${NS}.svc.cluster.local",
-                "hostnameOverride": "org${ORG}-peer1.${NS}.svc.cluster.local"
+                "ssl-target-name-override": "${ORG}-peer1.${NS}.svc.cluster.local",
+                "hostnameOverride": "${ORG}-peer1.${NS}.svc.cluster.local"
             }
         }
     },
     "certificateAuthorities": {
-        "org${ORG}-ca": {
-            "url": "https://org${ORG}-ca:443",
-            "caName": "org${ORG}-ca",
+        "${ORG}-ca": {
+            "url": "https://${ORG}-ca:443",
+            "caName": "${ORG}-ca",
             "tlsCACerts": {
                 "pem": ["${CAPEM}"]
             },

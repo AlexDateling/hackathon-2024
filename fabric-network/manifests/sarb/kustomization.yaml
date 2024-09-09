@@ -1,7 +1,7 @@
 resources:
-  - ca.yaml
-  - tls-cert-issuer.yaml
-  - job-scrub-fabric-volumes.yaml
-  - orderer1.yaml
-  - orderer2.yaml
-  - orderer3.yaml
+  - sarb-ca.yaml
+  - sarb-tls-cert-issuer.yaml
+  - sarb-job-scrub-fabric-volumes.yaml
+  - sarb-orderer1.yaml
+  - sarb-orderer2.yaml
+  - sarb-orderer3.yaml

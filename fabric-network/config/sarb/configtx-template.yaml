@@ -42,9 +42,9 @@ Organizations:
         Rule: "OR('SARBMSP.admin')"
 
     OrdererEndpoints:
-      - sarb-orderer1.${ORG0_NS}.svc.cluster.local:6050
-      - sarb-orderer2.${ORG0_NS}.svc.cluster.local:6050
-      - sarb-orderer3.${ORG0_NS}.svc.cluster.local:6050
+      - sarb-orderer1.${SARB_NS}.svc.cluster.local:6050
+      - sarb-orderer2.${SARB_NS}.svc.cluster.local:6050
+      - sarb-orderer3.${SARB_NS}.svc.cluster.local:6050
 
   - &ABSA
     # DefaultOrg defines the organization which is used in the sampleconfig
@@ -78,7 +78,7 @@ Organizations:
       # AnchorPeers defines the location of peers which can be used
       # for cross org gossip communication.  Note, this value is only
       # encoded in the genesis block in the Application section context
-      - Host: absa-peer1.${ORG1_NS}.svc.cluster.local
+      - Host: absa-peer1.${ABSA_NS}.svc.cluster.local
         Port: 7051
 
   - &CROSSBORDER
@@ -112,7 +112,7 @@ Organizations:
       # AnchorPeers defines the location of peers which can be used
       # for cross org gossip communication.  Note, this value is only
       # encoded in the genesis block in the Application section context
-      - Host: crossborder-peer1.${ORG2_NS}.svc.cluster.local
+      - Host: crossborder-peer1.${CROSSBORDER_NS}.svc.cluster.local
         Port: 7051
 
 ################################################################################
@@ -395,7 +395,7 @@ Profiles:
         - *CROSSBORDER
       Capabilities:
         <<: *ApplicationCapabilities
-  Org1Channel:
+  ABSAChannel:
     Consortium: SampleConsortium
     <<: *ChannelDefaults
     Application:
@@ -404,7 +404,7 @@ Profiles:
         - *ABSA
       Capabilities:
         <<: *ApplicationCapabilities
-  Org2Channel:
+  CROSSBORDERChannel:
     Consortium: SampleConsortium
     <<: *ChannelDefaults
     Application:

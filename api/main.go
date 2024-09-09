@@ -316,8 +316,8 @@ func getContract() (*gateway.Contract, error) {
 		"test-network",
 		"organizations",
 		"peerOrganizations",
-		"org1.example.com",
-		"connection-org1.yaml",
+		"absa.example.com",
+		"connection-absa.yaml",
 	)
 
 	gw, err := gateway.Connect(

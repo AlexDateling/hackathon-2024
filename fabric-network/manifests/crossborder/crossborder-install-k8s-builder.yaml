@@ -7,14 +7,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: org2-install-k8s-builder
+  name: crossborder-install-k8s-builder
 spec:
   ttlSecondsAfterFinished: 600
   backoffLimit: 0
   completions: 1
   template:
     metadata:
-      name: org2-install-k8s-builder
+      name: crossborder-install-k8s-builder
     spec:
       restartPolicy: "Never"
       containers:
@@ -24,11 +24,11 @@ spec:
           command:
             - sh
             - -c
-            - "mkdir -p /mnt/fabric-org2/fabric/external_builders && cp -rv /opt/hyperledger/k8s_builder /mnt/fabric-org2/fabric/external_builders/"
+            - "mkdir -p /mnt/fabric-crossborder/fabric/external_builders && cp -rv /opt/hyperledger/k8s_builder /mnt/fabric-crossborder/fabric/external_builders/"
           volumeMounts:
-            - name: fabric-org2-volume
-              mountPath: /mnt/fabric-org2
+            - name: fabric-crossborder-volume
+              mountPath: /mnt/fabric-crossborder
       volumes:
-        - name: fabric-org2-volume
+        - name: fabric-crossborder-volume
           persistentVolumeClaim:
-            claimName: fabric-org2
+            claimName: fabric-crossborder

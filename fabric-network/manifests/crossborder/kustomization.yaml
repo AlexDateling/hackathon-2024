@@ -1,0 +1,8 @@
+resources:
+  - crossborder-ca.yaml
+  - crossborder-cc-template.yaml
+  - crossborder-install-k8s-builder.yaml
+  - crossborder-job-scrub-fabric-volumes.yaml
+  - crossborder-peer1.yaml
+  - crossborder-peer2.yaml
+  - crossborder-tls-cert-issuer.yaml
