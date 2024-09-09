@@ -1,0 +1,184 @@
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: crossborder-peer1-tls-cert
+  namespace: ${crossborder_NS}
+spec:
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  dnsNames:
+    - localhost
+    - crossborder-peer1
+    - crossborder-peer1.${crossborder_NS}.svc.cluster.local
+    - crossborder-peer1.${DOMAIN}
+    - crossborder-peer-gateway-svc
+    - crossborder-peer-gateway-svc.${DOMAIN}
+  ipAddresses:
+    - 127.0.0.1
+  secretName: crossborder-peer1-tls-cert
+  issuerRef:
+    name: crossborder-tls-cert-issuer
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crossborder-peer1-config
+data:
+  FABRIC_CFG_PATH: /var/hyperledger/fabric/config
+  FABRIC_LOGGING_SPEC: "debug:cauthdsl,policies,msp,grpc,peer.gossip.mcs,gossip,leveldbhelper=info"
+  CORE_PEER_TLS_ENABLED: "true"
+  CORE_PEER_TLS_CERT_FILE: /var/hyperledger/fabric/config/tls/tls.crt
+  CORE_PEER_TLS_KEY_FILE: /var/hyperledger/fabric/config/tls/tls.key
+  CORE_PEER_TLS_ROOTCERT_FILE: /var/hyperledger/fabric/config/tls/ca.crt
+  CORE_PEER_ID: crossborder-peer1.crossborder.example.com
+  CORE_PEER_ADDRESS: crossborder-peer1:7051
+  CORE_PEER_LISTENADDRESS: 0.0.0.0:7051
+  CORE_PEER_CHAINCODEADDRESS: crossborder-peer1:7052
+  CORE_PEER_CHAINCODELISTENADDRESS: 0.0.0.0:7052
+  # bootstrap peer is the other peer in the same org
+  CORE_PEER_GOSSIP_BOOTSTRAP: crossborder-peer2:7051
+  CORE_PEER_GOSSIP_EXTERNALENDPOINT: crossborder-peer1.${crossborder_NS}.svc.cluster.local:7051
+  CORE_PEER_LOCALMSPID: crossborderMSP
+  CORE_PEER_MSPCONFIGPATH: /var/hyperledger/fabric/organizations/peerOrganizations/crossborder.example.com/peers/crossborder-peer1.crossborder.example.com/msp
+  CORE_OPERATIONS_LISTENADDRESS: 0.0.0.0:9443
+  CORE_PEER_FILESYSTEMPATH: /var/hyperledger/fabric/data/crossborder-peer1.crossborder.example.com
+  CORE_LEDGER_SNAPSHOTS_ROOTDIR: /var/hyperledger/fabric/data/crossborder-peer1.crossborder.example.com/snapshots
+  CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG: "{\"peername\":\"crossborderpeer1\"}"
+  FABRIC_K8S_BUILDER_OBJECT_NAME_PREFIX: crossborder-peer1-cc
+  CORE_LEDGER_STATE_STATEDATABASE: CouchDB
+  CORE_LEDGER_STATE_COUCHDBCONFIG_MAXRETRIESONSTARTUP: "20"
+  CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS: localhost:5984
+  CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME: admin
+  CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD: adminpw
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crossborder-peer1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crossborder-peer1
+  template:
+    metadata:
+      labels:
+        app: crossborder-peer1
+        org: crossborder
+    spec:
+      containers:
+        - name: main
+          image: ${FABRIC_PEER_IMAGE}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: crossborder-peer1-config
+          ports:
+            - containerPort: 7051
+            - containerPort: 7052
+            - containerPort: 9443
+          volumeMounts:
+            - name: fabric-volume
+              mountPath: /var/hyperledger
+            - name: fabric-config
+              mountPath: /var/hyperledger/fabric/config
+            - name: tls-cert-volume
+              mountPath: /var/hyperledger/fabric/config/tls
+              readOnly: true
+        - name: couchdb
+          image: couchdb:${COUCHDB_VERSION}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "COUCHDB_USER"
+              value: "admin"
+            - name: "COUCHDB_PASSWORD"
+              value: "adminpw"
+          ports:
+              - containerPort: 5984
+      volumes:
+        - name: fabric-volume
+          persistentVolumeClaim:
+            claimName: fabric-crossborder
+        - name: fabric-config
+          configMap:
+            name: crossborder-config
+        - name: tls-cert-volume
+          secret:
+            secretName: crossborder-peer1-tls-cert
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crossborder-peer1
+spec:
+  ports:
+    - name: grpc
+      port: 7051
+      protocol: TCP
+    - name: chaincode
+      port: 7052
+      protocol: TCP
+    - name: operations
+      port: 9443
+      protocol: TCP
+  selector:
+    app: crossborder-peer1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crossborder-peer-gateway-svc
+spec:
+  ports:
+    - name: grpc
+      port: 7051
+      protocol: TCP
+  selector:
+    org: crossborder
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 60s
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  labels:
+    app: crossborder-peer1
+  name: crossborder-peer1
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: crossborder-peer1.${DOMAIN}
+      http:
+        paths:
+          - backend:
+              service:
+                name: crossborder-peer1
+                port:
+                  name: grpc
+            path: /
+            pathType: ImplementationSpecific
+    - host: crossborder-peer-gateway-svc.${DOMAIN}
+      http:
+        paths:
+          - backend:
+              service:
+                name: crossborder-peer-gateway-svc
+                port:
+                  name: grpc
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - crossborder-peer1.${DOMAIN}
+    - hosts:
+        - crossborder-peer-gateway-svc.${DOMAIN}

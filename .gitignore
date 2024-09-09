@@ -64,3 +64,11 @@ go.work.sum
 
 # Keep .gitkeep files
 !/**/.gitkeep
+
+
+.idea/
+network.log
+network-debug.log
+build/
+bin/
+*.tgz

@@ -1,0 +1,8 @@
+resources:
+  - ca.yaml
+  - cc-template.yaml
+  - install-k8s-builder.yaml
+  - job-scrub-fabric-volumes.yaml
+  - peer1.yaml
+  - peer2.yaml
+  - tls-cert-issuer.yaml
