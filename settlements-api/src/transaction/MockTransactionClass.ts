@@ -1,4 +1,4 @@
-import { Bank, AccountDetails, Transaction, hashedAccountDetails, Payload } from './models'; // Assume these are imported from your models file
+import { Bank, AccountDetails, Transaction, hashedAccountDetails, Payload } from '../models/transaction.model'; // Assume these are imported from your models file
 import crypto from 'crypto';
 
 class MockTransaction {
