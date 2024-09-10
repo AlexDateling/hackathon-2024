@@ -58,41 +58,263 @@ The SADC Settlements Network enables banks in South Africa and other SADC countr
 
 (Include instructions for setting up the development environment, running the test network, and deploying the API and chaincode)
 
-## API Calls
-/transaction/{clientid}/createPayment
-Request:
-    Param:
-        - clientid
-    Request Body:
-        {
-            "amount": 0,
-            "receiverdetails": {
-                "name": "string",
-                "surname": "string",
-                "accountnumber": "string",
-                "bankdetails": {
-                    "bankid": "string",
-                    "name": "string",
-                    "country": "string"
-                }
-            }
+## API Sample Requests
+## Endpoints
+1. **Create Payment**
+Creates a new payment transaction.
+
+*URL*: /transaction/{clientid}/createPayment
+*Method*: POST
+*Params*
+    - clientid: ID of the client initiating the payment
+*Request Body*
+{
+    "amount": 0,
+    "receiverdetails": {
+        "name": "string",
+        "surname": "string",
+        "accountnumber": "string",
+        "bankdetails": {
+        "bankid": "string",
+        "name": "string",
+        "country": "string"
         }
+    }
+}
+*Sample Request*
+curl -X 'POST' \
+    'http://localhost:3000/transaction/alexsid/createPayment' \
+    -H 'accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "amount": 0,
+    "receiverdetails": {
+        "name": "string",
+        "surname": "string",
+        "accountnumber": "string",
+        "bankdetails": {
+        "bankid": "string",
+        "name": "string",
+        "country": "string"
+        }
+    }
+}'
+*Sample Response*
+{
+  "transaction_id": "1725977610309",
+  "client_details": {
+    "name": "Alex",
+    "surname": "Dateling",
+    "accountnumber": "0000000000",
+    "bankdetails": {
+      "bankid": "ABSA645334",
+      "name": "ABSA",
+      "country": "ZAR"
+    }
+  },
+  "receiver_details": {
+    "name": "string",
+    "surname": "string",
+    "accountnumber": "string",
+    "bankdetails": {
+      "bankid": "string",
+      "name": "string",
+      "country": "string"
+    }
+  },
+  "amount": 0,
+  "status": "PENDING",
+  "clientstatus": "PENDING",
+  "receiverstatus": "PENDING"
+}
+2. **Get Transaction**
+Retrieves details of a specific transaction.
 
-/transaction/{transactionid}/getTransaction
-    Param:
-        - transactionid
+*URL*: /transaction/{transactionid}/getTransaction
+*Method*: GET
+*Params*
+    - transactionid: ID of the transaction to retrieve
+*Sample Request*
+curl -X 'GET' \
+  'http://localhost:3000/transaction/1723618alexsid984554343834/getTransaction' \
+  -H 'accept: */*'
+*Sample Response*
+{
+  "transaction_id": "1723618alexsid984554343834",
+  "client_details": {
+    "name": "T",
+    "surname": "T",
+    "accountnumber": "11111111",
+    "bankdetails": {
+      "bankid": "ASDDSA",
+      "name": "ABSA",
+      "country": "ZAR"
+    }
+  },
+  "receiver_details": {
+    "name": "vvvv",
+    "surname": "assasaas",
+    "accountnumber": "0877654",
+    "bankdetails": {
+      "bankid": "BANKID12345",
+      "name": "ABank",
+      "country": "RSA"
+    }
+  },
+  "amount": 600,
+  "status": "PENDING",
+  "clientstatus": "SETTLED",
+  "receiverstatus": "PENDING"
+}
+3. **Settle Payment**
+Settles the payment for a specific transaction.
 
-/transaction/{transactionid}/settlePayment
-    Param:
-        - transactionid
+*URL*: /transaction/{transactionid}/settlePayment
+*Method*: POST
+*Params*
+    - transactionid: ID of the transaction to settle
+*Sample Request*
+curl -X 'POST' \
+  'http://localhost:3000/transaction/1725575573618alexsid9845543456653834/settlePayment' \
+  -H 'accept: */*' \
+  -d ''
+*Sample Response*
+{
+  "transaction_id": "1725575573618alexsid9845543456653834",
+  "client_details": {
+    "name": "Alex",
+    "surname": "Dateling",
+    "accountnumber": "0000000000",
+    "bankdetails": {
+      "bankid": "ABSA645334",
+      "name": "ABSA",
+      "country": "ZAR"
+    }
+  },
+  "receiver_details": {
+    "name": "NotAlex1",
+    "surname": "ASurname123",
+    "accountnumber": "9845543456",
+    "bankdetails": {
+      "bankid": "BANKID12345",
+      "name": "ABank",
+      "country": "RSA"
+    }
+  },
+  "amount": 2000,
+  "status": "PENDING",
+  "clientstatus": "SETTLED",
+  "receiverstatus": "PENDING"
+}
+4. **Settle Receive**
+Settles the receiving end of a specific transaction.
 
-/transaction/{transactionid}/settleReceive
-    Param:
-        - transactionid
-        
-/transaction/all
-    Param
-        - bankid
+*URL*: /transaction/{transactionid}/settleReceive
+*Method*: POST
+*Params*
+    - transactionid: ID of the transaction to settle
+*Sample Request*
+curl -X 'POST' \
+  'http://localhost:3000/transaction/1723618alexsid984554343834/settleReceive' \
+  -H 'accept: */*' \
+  -d ''
+*Sample Response*
+{
+  "transaction_id": "1723618alexsid984554343834",
+  "client_details": {
+    "name": "T",
+    "surname": "T",
+    "accountnumber": "11111111",
+    "bankdetails": {
+      "bankid": "ASDDSA",
+      "name": "ABSA",
+      "country": "ZAR"
+    }
+  },
+  "receiver_details": {
+    "name": "vvvv",
+    "surname": "assasaas",
+    "accountnumber": "0877654",
+    "bankdetails": {
+      "bankid": "BANKID12345",
+      "name": "ABank",
+      "country": "RSA"
+    }
+  },
+  "amount": 600,
+  "status": "SETTLED",
+  "clientstatus": "SETTLED",
+  "receiverstatus": "SETTLED"
+}
+5. **Get All Transactions**
+Retrieves all transactions for a specific bank.
+
+*URL*: /transaction/all
+*Method*: GET
+*Params*
+    - bankid: ID of the bank to retrieve transactions for
+*Sample Request*
+curl -X 'GET' \
+  'http://localhost:3000/transaction/all?bankid=BANKID12345' \
+  -H 'accept: */*'
+*Sample Response*
+[
+  {
+    "transaction_id": "1725575573618alexsid9845543456653834",
+    "client_details": {
+      "name": "Alex",
+      "surname": "Dateling",
+      "accountnumber": "0000000000",
+      "bankdetails": {
+        "bankid": "ABSA645334",
+        "name": "ABSA",
+        "country": "ZAR"
+      }
+    },
+    "receiver_details": {
+      "name": "NotAlex1",
+      "surname": "ASurname123",
+      "accountnumber": "9845543456",
+      "bankdetails": {
+        "bankid": "BANKID12345",
+        "name": "ABank",
+        "country": "RSA"
+      }
+    },
+    "amount": 2000,
+    "status": "PENDING",
+    "clientstatus": "SETTLED",
+    "receiverstatus": "PENDING"
+  },
+  {
+    "transaction_id": "1723618alexsid984554343834",
+    "client_details": {
+      "name": "T",
+      "surname": "T",
+      "accountnumber": "11111111",
+      "bankdetails": {
+        "bankid": "ASDDSA",
+        "name": "ABSA",
+        "country": "ZAR"
+      }
+    },
+    "receiver_details": {
+      "name": "vvvv",
+      "surname": "assasaas",
+      "accountnumber": "0877654",
+      "bankdetails": {
+        "bankid": "BANKID12345",
+        "name": "ABank",
+        "country": "RSA"
+      }
+    },
+    "amount": 600,
+    "status": "SETTLED",
+    "clientstatus": "SETTLED",
+    "receiverstatus": "SETTLED"
+  }
+]
+
 ## Contact
 
 Proudly Brought to you by Team **NApex**
