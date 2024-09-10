@@ -215,9 +215,12 @@ export class TransactionService {
     }
 
     getAllTransactions(bankid: string): Transaction[] {
-        return this.transactions.filter(
+        console.log("im in");
+        var transactionsArr = this.transactions.filter(
             t => t.client_details.bankdetails.bankid === bankid || t.receiver_details.bankdetails.bankid === bankid
-        );
+        )
+        console.log(transactionsArr);
+        return (transactionsArr);
     }
 
 }
