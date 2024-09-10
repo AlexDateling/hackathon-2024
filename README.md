@@ -58,6 +58,41 @@ The SADC Settlements Network enables banks in South Africa and other SADC countr
 
 (Include instructions for setting up the development environment, running the test network, and deploying the API and chaincode)
 
+## API Calls
+/transaction/{clientid}/createPayment
+Request:
+    Param:
+        - clientid
+    Request Body:
+        {
+            "amount": 0,
+            "receiverdetails": {
+                "name": "string",
+                "surname": "string",
+                "accountnumber": "string",
+                "bankdetails": {
+                    "bankid": "string",
+                    "name": "string",
+                    "country": "string"
+                }
+            }
+        }
+
+/transaction/{transactionid}/getTransaction
+    Param:
+        - transactionid
+
+/transaction/{transactionid}/settlePayment
+    Param:
+        - transactionid
+
+/transaction/{transactionid}/settleReceive
+    Param:
+        - transactionid
+        
+/transaction/all
+    Param
+        - bankid
 ## Contact
 
 Proudly Brought to you by Team **NApex**

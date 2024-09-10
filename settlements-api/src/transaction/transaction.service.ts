@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Bank, Client, Payload, Transaction } from '../models/transaction.model';
 
 @Injectable()
@@ -194,24 +194,52 @@ export class TransactionService {
         return this.transactions.find(t => t.transaction_id === id);
     }
 
+
+    updateTransaction(TransactionID: string, updatedTransaction: Transaction): Transaction | undefined {
+        const index = this.transactions.findIndex(t => t.transaction_id === TransactionID);
+        if (index === -1) {
+            throw new NotFoundException(`Transaction with ID ${TransactionID} not found`);
+        }
+        
+        console.log(updatedTransaction)
+        // Ensure the ID doesn't change
+        updatedTransaction.transaction_id = TransactionID;
+        
+        // Replace the old transaction with the updated one
+        this.transactions[index] = updatedTransaction;
+        
+        return this.transactions[index];
+    }
+
     settleTransactionPayment(TransactionID: string): Transaction | undefined {
         const transaction = this.getTransaction(TransactionID);
         if (transaction) {
-            transaction.status = 'SETTLED';
+            transaction.clientstatus = 'SETTLED';
+            if (transaction.clientstatus == 'SETTLED' && transaction.receiverstatus == 'SETTLED'){
+                transaction.status = 'SETTLED'
+            }
         }
 
+        return this.updateTransaction(TransactionID, transaction)
         // call chaincode to settle transaction
 
         // update the mockdata transactions
-        return transaction;
+        //  transaction;
     }
 
     settleTransactionReceive(TransactionID: string): Transaction | undefined {
         const transaction = this.getTransaction(TransactionID);
         if (transaction) {
-            transaction.status = 'SETTLED';
+            transaction.receiverstatus = 'SETTLED';
+            if (transaction.clientstatus == 'SETTLED' && transaction.receiverstatus == 'SETTLED'){
+                transaction.status = 'SETTLED'
+            }
         }
-        return transaction;
+
+        // call chaincode to settle transaction
+
+        // update the mockdata transactions
+        return this.updateTransaction(TransactionID, transaction)
     }
 
     getAllTransactions(bankid: string): Transaction[] {
