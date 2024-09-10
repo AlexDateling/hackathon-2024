@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Bank, Client, Payload, Transaction } from '../models/transaction.model';
-
+import { Bank, Client, hashedAccountDetails, Payload, Transaction } from '../models/transaction.model';
+import * as crypto from "crypto";
 @Injectable()
 export class TransactionService {
 
@@ -156,21 +156,32 @@ export class TransactionService {
         clientBank = getBank(loginClient.bankid) // need to get client bank details
 
         // check if client has enough munney
-        var isEnough: boolean = checkBalance(loginClient, payload.amount)
+        var isEnough: boolean = checkBalance()
 
         if (isEnough) {
-            //   generate a new transactionID
-            newTransaction.transaction_id = Date.now().toString();
-
-            newTransaction.client_details = {
+            // XXXXXXXXXXXXXXXXXXXXXX HASHED
+            var HashedSettlementDetails : hashedAccountDetails;
+            HashedSettlementDetails.client_details = {
                 name: loginClient.name,
                 surname: loginClient.surname,
                 accountnumber: loginClient.accountnumber,
                 bankdetails: clientBank,
 
             }
-            newTransaction.receiver_details = payload.receiverdetails
-            newTransaction.amount = payload.amount
+            HashedSettlementDetails.receiver_details = payload.receiverdetails
+            HashedSettlementDetails.amount = payload.amount
+            HashedSettlementDetails.time_epoch = Date.now().toString()
+            // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+            // Details for the settlement/Transaction
+            //  GENERATE HASH
+            newTransaction.transaction_id = generateHashedDetails(HashedSettlementDetails)
+            newTransaction.Senderbankdetails = clientBank
+            newTransaction.ReceiverBankDetails = {
+                bankid: payload.receiverdetails.bankdetails.bankid,
+                name: payload.receiverdetails.bankdetails.name,
+                country: payload.receiverdetails.bankdetails.country,
+            }
             newTransaction.status = "PENDING"
             newTransaction.clientstatus = "PENDING"
             newTransaction.receiverstatus = "PENDING"
@@ -245,7 +256,7 @@ export class TransactionService {
     getAllTransactions(bankid: string): Transaction[] {
         console.log("im in");
         var transactionsArr = this.transactions.filter(
-            t => t.client_details.bankdetails.bankid === bankid || t.receiver_details.bankdetails.bankid === bankid
+            t => t.Senderbankdetails.bankid === bankid || t.ReceiverBankDetails.bankid === bankid
         )
         console.log(transactionsArr);
         return (transactionsArr);
@@ -275,13 +286,17 @@ function getBank(BankID: string): Bank {
     }
 }
 
-function checkBalance(loginClient: Client, amount: number) {
-    if (loginClient.balance < amount) {
-        console.log("not enough munney")
-        return false
-    } else {
-        return true
-    }
+function checkBalance() {
+    return true
+}
+
+function generateHashedDetails(AccountDetails : hashedAccountDetails): string {
+    const jsonString = JSON.stringify(AccountDetails);
+
+    // Create a SHA-256 hash of the JSON string
+    const hash = crypto.createHash('sha256');
+    hash.update(jsonString);
+    return hash.digest('hex');
 }
 
 // MockData

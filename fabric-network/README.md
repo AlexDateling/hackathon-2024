@@ -26,7 +26,7 @@ Launch the network, create a channel, and deploy the [settlements-chaincode](../
 
 ./network channel create
 
-./network chaincode deploy settlements-chaincode ../settlements-chaincode/chaincode-go
+./network chaincode deploy settlements-chaincode ../settlements-chaincode/
 
 ```
 
@@ -36,3 +36,4 @@ Invoke and query chaincode:
 ./network chaincode invoke settlements-chaincode '{"Args":["InitLedger"]}'
 ./network chaincode query  settlements-chaincode '{"Args":["SettleReceiveTransactions","bankID"]}'
 ```
+./network chaincode query  settlements-chaincode '{"Args":["chaincodefunction","json"]}'

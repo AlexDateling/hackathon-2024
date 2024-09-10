@@ -38,18 +38,26 @@ export class AccountDetails {
 export class Transaction {
   @ApiProperty()
   transaction_id: string;
-  @ApiProperty()
-  client_details: AccountDetails;
-  @ApiProperty()
-  receiver_details: AccountDetails;
-  @ApiProperty()
-  amount: number;
+  
+  Senderbankdetails: Bank
+  ReceiverBankDetails: Bank
+  
   @ApiProperty()
   status: string;
   @ApiProperty()
   clientstatus: string;
   @ApiProperty()
   receiverstatus: string;
+}
+
+export class hashedAccountDetails {
+  @ApiProperty()
+  client_details: AccountDetails;
+  @ApiProperty()
+  receiver_details: AccountDetails;
+  @ApiProperty()
+  amount: number;
+  time_epoch: string;
 }
 
 export class Payload {
