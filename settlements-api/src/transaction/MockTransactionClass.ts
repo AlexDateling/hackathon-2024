@@ -2,7 +2,6 @@ import * as crypto from "crypto";
 import { AccountDetails, Bank, hashedAccountDetails, Payload, Transaction } from 'src/models/transaction.model';
 
 export class MockTransaction {
-  private static bankCounter = 1;
   private static accountCounter = 1;
   private static transactionCounter = 1;
 
@@ -31,14 +30,31 @@ export class MockTransaction {
     'Cooperative Bank', 'Development Bank', 'Agricultural Bank', 'Merchant Bank'
   ];
 
+  private static bankCache: Map<string, Bank> = new Map();
+
   static createMockBank(): Bank {
     const sadcCountry = this.sadcCountries[Math.floor(Math.random() * this.sadcCountries.length)];
     const bankName = this.bankNames[Math.floor(Math.random() * this.bankNames.length)];
-    return {
-      bankid: `${sadcCountry.currency}${this.bankCounter++}`,
-      name: `${sadcCountry.country} ${bankName}`,
+    const fullBankName = `${sadcCountry.country} ${bankName}`;
+    
+    // Check if this bank already exists in our cache
+    const cacheKey = `${sadcCountry.country}-${bankName}`;
+    if (this.bankCache.has(cacheKey)) {
+      return this.bankCache.get(cacheKey)!;
+    }
+
+    // If not, create a new bank
+    const countryCode = sadcCountry.country.toLowerCase().replace(/\s+/g, '');
+    const bankNameCode = bankName.toLowerCase().replace(/\s+/g, '');
+    const newBank: Bank = {
+      bankid: `${countryCode}-${bankNameCode}`,
+      name: fullBankName,
       country: sadcCountry.country
     };
+
+    // Cache the new bank
+    this.bankCache.set(cacheKey, newBank);
+    return newBank;
   }
 
   static createMockAccountDetails(): AccountDetails {
@@ -62,7 +78,6 @@ export class MockTransaction {
   static generateHashedDetails(accountDetails: hashedAccountDetails): string {
     const jsonString = JSON.stringify(accountDetails);
     const hash = crypto.createHash('sha256').update(jsonString).digest('hex');
-    crypto.createHash('sha256')
     return hash;
   }
 
