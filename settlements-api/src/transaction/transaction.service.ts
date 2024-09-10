@@ -23,54 +23,6 @@ export class TransactionService {
             receiverstatus: "PENDING"
           },
           {
-            transaction_id: "f352a6557960e50caa15c6e1b34deb2ae303fc0cf59c0660c1f9508fb7b56ef0",
-            Senderbankdetails: {
-              bankid: "ZMW1",
-              name: "Zambia Development Bank",
-              country: "Zambia"
-            },
-            ReceiverBankDetails: {
-              bankid: "ZMW2",
-              name: "Zambia National Bank",
-              country: "Zambia"
-            },
-            status: "FAILED",
-            clientstatus: "SETTLED",
-            receiverstatus: "PENDING"
-          },
-          {
-            transaction_id: "f352a6557960e50caa15c6e1b34deb2ae303fc0cf59c0660c1f9508fb7b56ef0",
-            Senderbankdetails: {
-              bankid: "ZMW1",
-              name: "Zambia Development Bank",
-              country: "Zambia"
-            },
-            ReceiverBankDetails: {
-              bankid: "ZMW2",
-              name: "Zambia National Bank",
-              country: "Zambia"
-            },
-            status: "FAILED",
-            clientstatus: "SETTLED",
-            receiverstatus: "PENDING"
-          },
-        {
-            transaction_id: "f352a6557960e50caa15c6e1b34deb2ae303fc0cf59c0660c1f9508fb7b56ef0",
-            Senderbankdetails: {
-              bankid: "ZMW1",
-              name: "Zambia Development Bank",
-              country: "Zambia"
-            },
-            ReceiverBankDetails: {
-              bankid: "ZMW2",
-              name: "Zambia National Bank",
-              country: "Zambia"
-            },
-            status: "FAILED",
-            clientstatus: "SETTLED",
-            receiverstatus: "PENDING"
-          },
-          {
             transaction_id: "ac2c46fb1fd1ba3bc234b451364b0bf099373538c99fe85bfb3b2b7b5cc0448b",
             Senderbankdetails: {
               bankid: "MWK3",

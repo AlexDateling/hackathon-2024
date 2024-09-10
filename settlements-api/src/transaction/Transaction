@@ -1,0 +1,179 @@
+Transaction 1:
+{
+  "transaction_id": "07edce096e2e50b4ce06f9e2c21a5f2e0d62824b40d9ff57ac520ad865e419d2",
+  "Senderbankdetails": {
+    "bankid": "mauritius-nationalbank",
+    "name": "Mauritius National Bank",
+    "country": "Mauritius"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "eswatini-agriculturalbank",
+    "name": "Eswatini Agricultural Bank",
+    "country": "Eswatini"
+  },
+  "status": "SETTLED",
+  "clientstatus": "PENDING",
+  "receiverstatus": "FAILED"
+}
+
+Transaction 2:
+{
+  "transaction_id": "d2c0e825e3f41ce0d612e9cfd4b9efa74491326f497b9fda94598327641f2c28",
+  "Senderbankdetails": {
+    "bankid": "namibia-nationalbank",
+    "name": "Namibia National Bank",
+    "country": "Namibia"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "tanzania-developmentbank",
+    "name": "Tanzania Development Bank",
+    "country": "Tanzania"
+  },
+  "status": "SETTLED",
+  "clientstatus": "PENDING",
+  "receiverstatus": "FAILED"
+}
+
+Transaction 3:
+{
+  "transaction_id": "6ab502e0cdeae5bbcbeb6a1a5adc02c117d2fb7531df38306b44bada65b07418",
+  "Senderbankdetails": {
+    "bankid": "angola-nationalbank",
+    "name": "Angola National Bank",
+    "country": "Angola"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "mozambique-investmentbank",
+    "name": "Mozambique Investment Bank",
+    "country": "Mozambique"
+  },
+  "status": "SETTLED",
+  "clientstatus": "FAILED",
+  "receiverstatus": "FAILED"
+}
+
+Transaction 4:
+{
+  "transaction_id": "349c8379423d6e557fba23d0c71c08e6b23e681f332b95b1f5d90eb3b2e008e3",
+  "Senderbankdetails": {
+    "bankid": "seychelles-merchantbank",
+    "name": "Seychelles Merchant Bank",
+    "country": "Seychelles"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "mozambique-cooperativebank",
+    "name": "Mozambique Cooperative Bank",
+    "country": "Mozambique"
+  },
+  "status": "FAILED",
+  "clientstatus": "FAILED",
+  "receiverstatus": "PENDING"
+}
+
+Transaction 5:
+{
+  "transaction_id": "08427ac3c611563fea3f119858e85f3eb538813352396940b61fd8e11e9ccc7a",
+  "Senderbankdetails": {
+    "bankid": "zimbabwe-nationalbank",
+    "name": "Zimbabwe National Bank",
+    "country": "Zimbabwe"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "tanzania-nationalbank",
+    "name": "Tanzania National Bank",
+    "country": "Tanzania"
+  },
+  "status": "PENDING",
+  "clientstatus": "FAILED",
+  "receiverstatus": "SETTLED"
+}
+
+Transaction 6:
+{
+  "transaction_id": "025d70bffd79271dee158ac23d16fb8b06a5af44cc57a2bae1ae6a94a16337db",
+  "Senderbankdetails": {
+    "bankid": "namibia-investmentbank",
+    "name": "Namibia Investment Bank",
+    "country": "Namibia"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "mauritius-agriculturalbank",
+    "name": "Mauritius Agricultural Bank",
+    "country": "Mauritius"
+  },
+  "status": "FAILED",
+  "clientstatus": "SETTLED",
+  "receiverstatus": "PENDING"
+}
+
+Transaction 7:
+{
+  "transaction_id": "1bb1c832a9ce5ab3f6ca6a68571f0107c7e08c3f946115023c049997b87772a1",
+  "Senderbankdetails": {
+    "bankid": "botswana-agriculturalbank",
+    "name": "Botswana Agricultural Bank",
+    "country": "Botswana"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "southafrica-merchantbank",
+    "name": "South Africa Merchant Bank",
+    "country": "South Africa"
+  },
+  "status": "SETTLED",
+  "clientstatus": "PENDING",
+  "receiverstatus": "SETTLED"
+}
+
+Transaction 8:
+{
+  "transaction_id": "b86e8df8976c3034055f5ddd559c2173f0fff53c3f6a4a5b0d2f2fc6cd1fa668",
+  "Senderbankdetails": {
+    "bankid": "zambia-nationalbank",
+    "name": "Zambia National Bank",
+    "country": "Zambia"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "zambia-merchantbank",
+    "name": "Zambia Merchant Bank",
+    "country": "Zambia"
+  },
+  "status": "SETTLED",
+  "clientstatus": "FAILED",
+  "receiverstatus": "FAILED"
+}
+
+Transaction 9:
+{
+  "transaction_id": "f7e72980ee6437090e35b6c4e8aafaac0ea399c77450b9ec7b28a5e88a811733",
+  "Senderbankdetails": {
+    "bankid": "seychelles-merchantbank",
+    "name": "Seychelles Merchant Bank",
+    "country": "Seychelles"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "democraticrepublicofcongo-commercialbank",
+    "name": "Democratic Republic of Congo Commercial Bank",
+    "country": "Democratic Republic of Congo"
+  },
+  "status": "FAILED",
+  "clientstatus": "PENDING",
+  "receiverstatus": "PENDING"
+}
+
+Transaction 10:
+{
+  "transaction_id": "2effaf346fb267dd4a30782259dddd194b2e2b03cd469a24dffe1a2353e5d331",
+  "Senderbankdetails": {
+    "bankid": "comoros-savingsbank",
+    "name": "Comoros Savings Bank",
+    "country": "Comoros"
+  },
+  "ReceiverBankDetails": {
+    "bankid": "tanzania-commercialbank",
+    "name": "Tanzania Commercial Bank",
+    "country": "Tanzania"
+  },
+  "status": "FAILED",
+  "clientstatus": "FAILED",
+  "receiverstatus": "FAILED"
+}
