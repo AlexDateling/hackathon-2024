@@ -65,10 +65,10 @@ The SADC Settlements Network enables banks in South Africa and other SADC countr
 Creates a new payment transaction.
 
 `/transaction/{clientid}/createPayment`
-*Method*: POST
-*Params*
+**Method**: POST
+**Params**
     - clientid: ID of the client initiating the payment
-*Request Body*
+**Request Body**
 ```
 {
     "amount": 0,
@@ -142,16 +142,16 @@ Retrieves details of a specific transaction.
 
 
 `/transaction/{transactionid}/getTransaction`
-*Method*: GET
-*Params*
+**Method**: GET
+**Params**
     - transactionid: ID of the transaction to retrieve
-*Sample Request*
+**Sample Request**
 ```
 curl -X 'GET' \
   'http://localhost:3000/transaction/1723618alexsid984554343834/getTransaction' \
   -H 'accept: */*'
 ```
-*Sample Response*
+**Sample Response**
 ```
 {
   "transaction_id": "1723618alexsid984554343834",
