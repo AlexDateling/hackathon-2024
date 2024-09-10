@@ -66,8 +66,10 @@ Creates a new payment transaction.
 
 `/transaction/{clientid}/createPayment`
 **Method**: POST
+
 **Params**
-    - clientid: ID of the client initiating the payment
+- clientid: ID of the client initiating the payment
+
 **Request Body**
 ```
 {
@@ -135,16 +137,18 @@ curl -X 'POST' \
 }
 ```
 </details>
+
 <details>
 <summary>2. **Get Transaction**</summary>
 Retrieves details of a specific transaction.
 
-
-
 `/transaction/{transactionid}/getTransaction`
+
 **Method**: GET
+
 **Params**
     - transactionid: ID of the transaction to retrieve
+
 **Sample Request**
 ```
 curl -X 'GET' \
@@ -187,9 +191,11 @@ curl -X 'GET' \
 Settles the payment for a specific transaction.
 
 `/transaction/{transactionid}/settlePayment`
+
 *Method*: POST
+
 *Params*
-    - transactionid: ID of the transaction to settle
+- transactionid: ID of the transaction to settle
 *Sample Request*
 ```
 curl -X 'POST' \
