@@ -133,12 +133,13 @@ curl -X 'POST' \
   "receiverstatus": "PENDING"
 }
 ```
-2. **Get Transaction**
+<details>
+<summary>2. **Get Transaction**</summary>
 Retrieves details of a specific transaction.
 
-<details>
 
-<summary>*URL*: /transaction/{transactionid}/getTransaction</summary>
+
+*URL*: /transaction/{transactionid}/getTransaction
 *Method*: GET
 *Params*
     - transactionid: ID of the transaction to retrieve
