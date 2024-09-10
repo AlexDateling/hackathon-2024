@@ -64,7 +64,7 @@ The SADC Settlements Network enables banks in South Africa and other SADC countr
 <summary>1. **Create Payment**</summary>
 Creates a new payment transaction.
 
-*URL*: /transaction/{clientid}/createPayment
+`/transaction/{clientid}/createPayment`
 *Method*: POST
 *Params*
     - clientid: ID of the client initiating the payment
@@ -141,7 +141,7 @@ Retrieves details of a specific transaction.
 
 
 
-*URL*: /transaction/{transactionid}/getTransaction
+`/transaction/{transactionid}/getTransaction`
 *Method*: GET
 *Params*
     - transactionid: ID of the transaction to retrieve
@@ -186,7 +186,7 @@ curl -X 'GET' \
 <summary>3. **Settle Payment**</summary>
 Settles the payment for a specific transaction.
 
-*URL*: /transaction/{transactionid}/settlePayment
+`/transaction/{transactionid}/settlePayment`
 *Method*: POST
 *Params*
     - transactionid: ID of the transaction to settle
@@ -232,7 +232,7 @@ curl -X 'POST' \
 <summary>4. **Settle Receive**</summary>
 Settles the receiving end of a specific transaction.
 
-*URL*: /transaction/{transactionid}/settleReceive
+`/transaction/{transactionid}/settleReceive`
 *Method*: POST
 *Params*
     - transactionid: ID of the transaction to settle
@@ -278,7 +278,7 @@ curl -X 'POST' \
 <summary>5. **Get All Transactions**</summary>
 Retrieves all transactions for a specific bank.
 
-*URL*: /transaction/all
+`/transaction/all`
 *Method*: GET
 *Params*
     - bankid: ID of the bank to retrieve transactions for
