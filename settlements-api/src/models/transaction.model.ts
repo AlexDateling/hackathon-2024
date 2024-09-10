@@ -38,8 +38,9 @@ export class AccountDetails {
 export class Transaction {
   @ApiProperty()
   transaction_id: string;
-  
+  @ApiProperty()
   Senderbankdetails: Bank
+  @ApiProperty()
   ReceiverBankDetails: Bank
   
   @ApiProperty()
@@ -57,6 +58,7 @@ export class hashedAccountDetails {
   receiver_details: AccountDetails;
   @ApiProperty()
   amount: number;
+  @ApiProperty()
   time_epoch: string;
 }
 

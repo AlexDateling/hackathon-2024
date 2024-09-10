@@ -1,4 +1,4 @@
-package chaincode
+package main
 
 import (
 	"encoding/json"
@@ -14,16 +14,20 @@ type SmartContract struct {
 
 // Insert struct field in alphabetic order => to achieve determinism across languages
 // golang keeps the order when marshal to json but doesn't order automatically
-
-type Transaction struct {
-	TransactionID   string         `json:"transaction_id"`
+type hashedAccountDetails struct {
 	ClientDetails   AccountDetails `json:"client_details"`
 	ReceiverDetails AccountDetails `json:"receiver_details"`
+	Amount          float64
+	TimeEpoch       string
+}
+type Transaction struct {
+	TransactionID       string `json:"transaction_id"`
+	SenderBankDetails   Bank   `json:"sender_bank_details"`
+	ReceiverBankDetails Bank   `json:"receiver_details"`
 
-	Amount         float64 `json:"amount"`
-	Status         string  `json:"status"`
-	ClientStatus   string  `json:"clientstatus"`
-	ReceiverStatus string  `json:"receiverstatus"`
+	Status         string `json:"status"`
+	ClientStatus   string `json:"clientstatus"`
+	ReceiverStatus string `json:"receiverstatus"`
 }
 
 type AccountDetails struct {
@@ -42,138 +46,166 @@ type Bank struct {
 // InitLedger adds a base set of transactions to the ledger
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	transactions := []Transaction{
-		{TransactionID: "1725575573618alexsid9845543456653834",
-			ClientDetails: AccountDetails{
-				Name:          "Alex",
-				Surname:       "Dateling",
-				AccountNumber: "0000000000",
-				BankDetails: Bank{
-					BankID:  "ABSA645334",
-					Name:    "ABSA",
-					Country: "ZAR",
-				},
+
+		{
+			TransactionID: "07edce096e2e50b4ce06f9e2c21a5f2e0d62824b40d9ff57ac520ad865e419d2",
+			SenderBankDetails: Bank{
+				BankID:  "mauritius-nationalbank",
+				Name:    "Mauritius National Bank",
+				Country: "Mauritius",
 			},
-			ReceiverDetails: AccountDetails{
-				Name:          "NotAlex1",
-				Surname:       "ASurname123",
-				AccountNumber: "9845543456",
-				BankDetails: Bank{
-					BankID:  "BANKID12345",
-					Name:    "ABank",
-					Country: "RSA",
-				},
+			ReceiverBankDetails: Bank{
+				BankID:  "eswatini-agriculturalbank",
+				Name:    "Eswatini Agricultural Bank",
+				Country: "Eswatini",
 			},
-			Amount:         2000,
+			Status:         "SETTLED",
+			ClientStatus:   "PENDING",
+			ReceiverStatus: "FAILED",
+		},
+		{
+			TransactionID: "d2c0e825e3f41ce0d612e9cfd4b9efa74491326f497b9fda94598327641f2c28",
+			SenderBankDetails: Bank{
+				BankID:  "namibia-nationalbank",
+				Name:    "Namibia National Bank",
+				Country: "Namibia",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "tanzania-developmentbank",
+				Name:    "Tanzania Development Bank",
+				Country: "Tanzania",
+			},
+			Status:         "SETTLED",
+			ClientStatus:   "PENDING",
+			ReceiverStatus: "FAILED",
+		},
+		{
+			TransactionID: "6ab502e0cdeae5bbcbeb6a1a5adc02c117d2fb7531df38306b44bada65b07418",
+			SenderBankDetails: Bank{
+				BankID:  "angola-nationalbank",
+				Name:    "Angola National Bank",
+				Country: "Angola",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "mozambique-investmentbank",
+				Name:    "Mozambique Investment Bank",
+				Country: "Mozambique",
+			},
+			Status:         "SETTLED",
+			ClientStatus:   "FAILED",
+			ReceiverStatus: "FAILED",
+		},
+		{
+			TransactionID: "349c8379423d6e557fba23d0c71c08e6b23e681f332b95b1f5d90eb3b2e008e3",
+			SenderBankDetails: Bank{
+				BankID:  "seychelles-merchantbank",
+				Name:    "Seychelles Merchant Bank",
+				Country: "Seychelles",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "mozambique-cooperativebank",
+				Name:    "Mozambique Cooperative Bank",
+				Country: "Mozambique",
+			},
+			Status:         "FAILED",
+			ClientStatus:   "FAILED",
+			ReceiverStatus: "PENDING",
+		},
+		{
+			TransactionID: "08427ac3c611563fea3f119858e85f3eb538813352396940b61fd8e11e9ccc7a",
+			SenderBankDetails: Bank{
+				BankID:  "zimbabwe-nationalbank",
+				Name:    "Zimbabwe National Bank",
+				Country: "Zimbabwe",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "tanzania-nationalbank",
+				Name:    "Tanzania National Bank",
+				Country: "Tanzania",
+			},
 			Status:         "PENDING",
+			ClientStatus:   "FAILED",
+			ReceiverStatus: "SETTLED",
+		},
+		{
+			TransactionID: "025d70bffd79271dee158ac23d16fb8b06a5af44cc57a2bae1ae6a94a16337db",
+			SenderBankDetails: Bank{
+				BankID:  "namibia-investmentbank",
+				Name:    "Namibia Investment Bank",
+				Country: "Namibia",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "mauritius-agriculturalbank",
+				Name:    "Mauritius Agricultural Bank",
+				Country: "Mauritius",
+			},
+			Status:         "FAILED",
+			ClientStatus:   "SETTLED",
+			ReceiverStatus: "PENDING",
+		},
+		{
+			TransactionID: "1bb1c832a9ce5ab3f6ca6a68571f0107c7e08c3f946115023c049997b87772a1",
+			SenderBankDetails: Bank{
+				BankID:  "botswana-agriculturalbank",
+				Name:    "Botswana Agricultural Bank",
+				Country: "Botswana",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "southafrica-merchantbank",
+				Name:    "South Africa Merchant Bank",
+				Country: "South Africa",
+			},
+			Status:         "SETTLED",
+			ClientStatus:   "PENDING",
+			ReceiverStatus: "SETTLED",
+		},
+		{
+			TransactionID: "b86e8df8976c3034055f5ddd559c2173f0fff53c3f6a4a5b0d2f2fc6cd1fa668",
+			SenderBankDetails: Bank{
+				BankID:  "zambia-nationalbank",
+				Name:    "Zambia National Bank",
+				Country: "Zambia",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "zambia-merchantbank",
+				Name:    "Zambia Merchant Bank",
+				Country: "Zambia",
+			},
+			Status:         "SETTLED",
+			ClientStatus:   "FAILED",
+			ReceiverStatus: "FAILED",
+		},
+		{
+			TransactionID: "f7e72980ee6437090e35b6c4e8aafaac0ea399c77450b9ec7b28a5e88a811733",
+			SenderBankDetails: Bank{
+				BankID:  "seychelles-merchantbank",
+				Name:    "Seychelles Merchant Bank",
+				Country: "Seychelles",
+			},
+			ReceiverBankDetails: Bank{
+				BankID:  "democraticrepublicofcongo-commercialbank",
+				Name:    "Democratic Republic of Congo Commercial Bank",
+				Country: "Democratic Republic of Congo",
+			},
+			Status:         "FAILED",
 			ClientStatus:   "PENDING",
 			ReceiverStatus: "PENDING",
 		},
-		{TransactionID: "1723618alexsid984554343834",
-			ClientDetails: AccountDetails{
-				Name:          "T",
-				Surname:       "T",
-				AccountNumber: "11111111",
-				BankDetails: Bank{
-					BankID:  "ASDDSA",
-					Name:    "ABSA",
-					Country: "ZAR",
-				},
-			},
-			ReceiverDetails: AccountDetails{
-				Name:          "vvvv",
-				Surname:       "assasaas",
-				AccountNumber: "0877654",
-				BankDetails: Bank{
-					BankID:  "BANKID12345",
-					Name:    "ABank",
-					Country: "RSA",
-				},
-			},
-			Amount:         600,
-			Status:         "PENDING",
-			ClientStatus:   "SETTLED",
-			ReceiverStatus: "PENDING",
-		},
 		{
-			TransactionID: "1723618alexsid984554343834",
-			ClientDetails: AccountDetails{
-				Name:          "T",
-				Surname:       "T",
-				AccountNumber: "11111111",
-				BankDetails: Bank{
-					BankID:  "ASDDSA",
-					Name:    "ABSA",
-					Country: "ZAR",
-				},
+			TransactionID: "2effaf346fb267dd4a30782259dddd194b2e2b03cd469a24dffe1a2353e5d331",
+			SenderBankDetails: Bank{
+				BankID:  "comoros-savingsbank",
+				Name:    "Comoros Savings Bank",
+				Country: "Comoros",
 			},
-			ReceiverDetails: AccountDetails{
-				Name:          "vvvv",
-				Surname:       "assasaas",
-				AccountNumber: "0877654",
-				BankDetails: Bank{
-					BankID:  "BANKID12345",
-					Name:    "ABank",
-					Country: "RSA",
-				},
+			ReceiverBankDetails: Bank{
+				BankID:  "tanzania-commercialbank",
+				Name:    "Tanzania Commercial Bank",
+				Country: "Tanzania",
 			},
-			Amount:         600,
-			Status:         "PENDING",
-			ClientStatus:   "PENDING",
-			ReceiverStatus: "SETTLED",
-		},
-		{
-			TransactionID: "2837465alexsid984554343835",
-			ClientDetails: AccountDetails{
-				Name:          "Alice",
-				Surname:       "Smith",
-				AccountNumber: "22223333",
-				BankDetails: Bank{
-					BankID:  "BANKXYZ",
-					Name:    "Bank of Example",
-					Country: "USD",
-				},
-			},
-			ReceiverDetails: AccountDetails{
-				Name:          "Bob",
-				Surname:       "Jones",
-				AccountNumber: "7654321",
-				BankDetails: Bank{
-					BankID:  "BANKXYZ678",
-					Name:    "Another Bank",
-					Country: "US",
-				},
-			},
-			Amount:         1500,
-			Status:         "SETTLED",
-			ClientStatus:   "SETTLED",
-			ReceiverStatus: "SETTLED",
-		},
-		{
-			TransactionID: "3948576alexsid984554343836",
-			ClientDetails: AccountDetails{
-				Name:          "John",
-				Surname:       "Doe",
-				AccountNumber: "33334444",
-				BankDetails: Bank{
-					BankID:  "XYZ123",
-					Name:    "Global Bank",
-					Country: "GBP",
-				},
-			},
-			ReceiverDetails: AccountDetails{
-				Name:          "Jane",
-				Surname:       "Doe",
-				AccountNumber: "43211234",
-				BankDetails: Bank{
-					BankID:  "XYZ456",
-					Name:    "Regional Bank",
-					Country: "GB",
-				},
-			},
-			Amount:         2500,
-			Status:         "SETTLED",
-			ClientStatus:   "SETTLED",
-			ReceiverStatus: "SETTLED",
+			Status:         "FAILED",
+			ClientStatus:   "FAILED",
+			ReceiverStatus: "FAILED",
 		},
 	}
 
@@ -192,7 +224,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 
-func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInterface, transactionId string, clientDetails AccountDetails, receiverDetails AccountDetails, amount float64, status string, clientstatus string, receiverstatus string) error {
+func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInterface, transactionId string, senderbankdetails Bank, receiverbankdetails Bank, status string, clientstatus string, receiverstatus string) error {
 	exists, err := s.TransactionExists(ctx, transactionId)
 	if err != nil {
 		return err
@@ -203,13 +235,12 @@ func (s *SmartContract) CreateTransaction(ctx contractapi.TransactionContextInte
 	}
 
 	transaction := Transaction{
-		TransactionID:   transactionId,
-		ClientDetails:   clientDetails,
-		ReceiverDetails: receiverDetails,
-		Amount:          amount,
-		Status:          status,
-		ClientStatus:    clientstatus,
-		ReceiverStatus:  receiverstatus,
+		TransactionID:       transactionId,
+		SenderBankDetails:   senderbankdetails,
+		ReceiverBankDetails: receiverbankdetails,
+		Status:              status,
+		ClientStatus:        clientstatus,
+		ReceiverStatus:      receiverstatus,
 	}
 
 	transactionJSON, err := json.Marshal(transaction)
@@ -406,7 +437,7 @@ func (s *SmartContract) BatchSettlePaymentTransactions(ctx contractapi.Transacti
 		// Get all pending transactions
 		if transaction.Status == "PENDING" {
 			// Check which transaction is the bank that called it, need some sort of authorization aswell
-			if transaction.ClientDetails.BankDetails.BankID == bankID {
+			if transaction.SenderBankDetails.BankID == bankID {
 				transactions = append(transactions, &transaction)
 			}
 		}
@@ -460,7 +491,7 @@ func (s *SmartContract) BatchSettleReceiveTransactions(ctx contractapi.Transacti
 		// Get all pending transactions
 		if transaction.Status == "PENDING" || transaction.Status == "INPROGRESS" {
 			// Check which transaction is the bank that called it, need some sort of authorization aswell
-			if transaction.ReceiverDetails.BankDetails.BankID == bankID {
+			if transaction.ReceiverBankDetails.BankID == bankID {
 				transactions = append(transactions, &transaction)
 			}
 		}
