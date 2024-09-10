@@ -371,6 +371,7 @@ curl -X 'GET' \
 ]
 ```
 </details>
+
 ## Contact
 
 Proudly Brought to you by Team **NApex**
