@@ -11,7 +11,7 @@ spec:
   dnsNames:
     - localhost
     - sarb-ca
-    - sarb-ca.${sarb_NS}.svc.cluster.local
+    - sarb-ca.${SARB_NS}.svc.cluster.local
     - sarb-ca.${DOMAIN}
   ipAddresses:
     - 127.0.0.1
