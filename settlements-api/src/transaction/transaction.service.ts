@@ -502,12 +502,30 @@ function checkBalance() {
 }
 
 function generateHashedDetails(AccountDetails : hashedAccountDetails): string {
+    // const jsonString = JSON.stringify(AccountDetails);
+
+    // const hash = crypto.createHash('sha256').update(jsonString).digest('hex');
+    // return hash;
+
     const jsonString = JSON.stringify(AccountDetails);
 
-    // Create a SHA-256 hash of the JSON string
-    const hash = crypto.createHash('sha256');
-    hash.update(jsonString);
-    return hash.digest('hex');
+    const buffer = Buffer.from(jsonString, 'utf-8');
+  
+    // Convert Buffer to Base64 string
+    const base64String = buffer.toString('base64');
+  
+    return base64String;
+}
+
+function decodeTransactionID(transaction_id: string): hashedAccountDetails {
+  // Create a Buffer from the Base64 string
+  const buffer = Buffer.from(transaction_id, 'base64');
+
+  // Convert Buffer to JSON string
+  const jsonString = buffer.toString('utf-8');
+
+  // Parse JSON string into a JSON object
+  return JSON.parse(jsonString);
 }
 
 // MockData
