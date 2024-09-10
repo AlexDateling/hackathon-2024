@@ -59,7 +59,7 @@ The SADC Settlements Network enables banks in South Africa and other SADC countr
 (Include instructions for setting up the development environment, running the test network, and deploying the API and chaincode)
 
 ## API Sample Requests
-# Endpoints
+### Endpoints
 
 <details>
 <summary>Create Payment</summary>
