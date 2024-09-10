@@ -82,6 +82,7 @@ Creates a new payment transaction.
     }
 }
 *Sample Request*
+```
 curl -X 'POST' \
     'http://localhost:3000/transaction/alexsid/createPayment' \
     -H 'accept: */*' \
@@ -99,7 +100,9 @@ curl -X 'POST' \
         }
     }
 }'
+```
 *Sample Response*
+```
 {
   "transaction_id": "1725977610309",
   "client_details": {
@@ -127,6 +130,7 @@ curl -X 'POST' \
   "clientstatus": "PENDING",
   "receiverstatus": "PENDING"
 }
+```
 2. **Get Transaction**
 Retrieves details of a specific transaction.
 
@@ -135,10 +139,13 @@ Retrieves details of a specific transaction.
 *Params*
     - transactionid: ID of the transaction to retrieve
 *Sample Request*
+```
 curl -X 'GET' \
   'http://localhost:3000/transaction/1723618alexsid984554343834/getTransaction' \
   -H 'accept: */*'
+```
 *Sample Response*
+```
 {
   "transaction_id": "1723618alexsid984554343834",
   "client_details": {
@@ -166,6 +173,7 @@ curl -X 'GET' \
   "clientstatus": "SETTLED",
   "receiverstatus": "PENDING"
 }
+```
 3. **Settle Payment**
 Settles the payment for a specific transaction.
 
@@ -174,11 +182,14 @@ Settles the payment for a specific transaction.
 *Params*
     - transactionid: ID of the transaction to settle
 *Sample Request*
+```
 curl -X 'POST' \
   'http://localhost:3000/transaction/1725575573618alexsid9845543456653834/settlePayment' \
   -H 'accept: */*' \
   -d ''
+```
 *Sample Response*
+```
 {
   "transaction_id": "1725575573618alexsid9845543456653834",
   "client_details": {
@@ -206,6 +217,7 @@ curl -X 'POST' \
   "clientstatus": "SETTLED",
   "receiverstatus": "PENDING"
 }
+```
 4. **Settle Receive**
 Settles the receiving end of a specific transaction.
 
@@ -214,11 +226,14 @@ Settles the receiving end of a specific transaction.
 *Params*
     - transactionid: ID of the transaction to settle
 *Sample Request*
+```
 curl -X 'POST' \
   'http://localhost:3000/transaction/1723618alexsid984554343834/settleReceive' \
   -H 'accept: */*' \
   -d ''
+```
 *Sample Response*
+```
 {
   "transaction_id": "1723618alexsid984554343834",
   "client_details": {
@@ -246,6 +261,7 @@ curl -X 'POST' \
   "clientstatus": "SETTLED",
   "receiverstatus": "SETTLED"
 }
+```
 5. **Get All Transactions**
 Retrieves all transactions for a specific bank.
 
@@ -254,10 +270,13 @@ Retrieves all transactions for a specific bank.
 *Params*
     - bankid: ID of the bank to retrieve transactions for
 *Sample Request*
+```
 curl -X 'GET' \
   'http://localhost:3000/transaction/all?bankid=BANKID12345' \
   -H 'accept: */*'
+```
 *Sample Response*
+```
 [
   {
     "transaction_id": "1725575573618alexsid9845543456653834",
@@ -314,7 +333,7 @@ curl -X 'GET' \
     "receiverstatus": "SETTLED"
   }
 ]
-
+```
 ## Contact
 
 Proudly Brought to you by Team **NApex**
