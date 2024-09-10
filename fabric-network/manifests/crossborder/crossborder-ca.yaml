@@ -16,7 +16,7 @@ spec:
   dnsNames:
     - localhost
     - crossborder-ca
-    - crossborder-ca.${crossborder_NS}.svc.cluster.local
+    - crossborder-ca.${CROSSBORDER_NS}.svc.cluster.local
     - crossborder-ca.${DOMAIN}
   ipAddresses:
     - 127.0.0.1

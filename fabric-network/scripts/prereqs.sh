@@ -42,16 +42,34 @@ function check_prereqs() {
     exit 1
   fi
 
-  # Define the sed expression to extract the version number
-  VERSION_SED_EXPR='s/^ Version: v\?\(.*\)$/\1/p'
+  # Function to extract version using awk
+  extract_version() {
+      local input=$1
+      echo "$input" | awk '
+      /peer:/ || /fabric-ca-server:/ {in_section=1}
+      in_section && /Version:/ {
+          sub(/^[[:space:]]*Version:[[:space:]]*v?/, "")
+          print
+          exit
+      }
+      /^[0-9]+\.[0-9]+\.[0-9]+/ {
+          print
+          exit
+      }
+      '
+  }
 
   # Use the fabric peer and ca containers to check fabric image versions
   # NOTE: About extracting the version number:
   # In older versions, the prefix 'v' was not included in the version string,
   # but in recent versions, 'v' has been added.
   # The following commands remove the optional 'v' to standardize the format.
-  FABRIC_IMAGE_VERSION=$(${CONTAINER_CLI} run --rm ${FABRIC_PEER_IMAGE} peer version | sed -ne "$VERSION_SED_EXPR")
-  FABRIC_CA_IMAGE_VERSION=$(${CONTAINER_CLI} run --rm ${FABRIC_CONTAINER_REGISTRY}/fabric-ca:$FABRIC_CA_VERSION fabric-ca-server version | sed -ne "$VERSION_SED_EXPR")
+  PEER_OUTPUT=$(${CONTAINER_CLI} run --rm ${FABRIC_PEER_IMAGE} peer version)
+  CA_OUTPUT=$(${CONTAINER_CLI} run --rm ${FABRIC_CONTAINER_REGISTRY}/fabric-ca:$FABRIC_CA_VERSION fabric-ca-server version)
+
+
+  FABRIC_IMAGE_VERSION=$(extract_version "$PEER_OUTPUT")
+  FABRIC_CA_IMAGE_VERSION=$(extract_version "$CA_OUTPUT")
   echo "Fabric image versions: Peer ($FABRIC_IMAGE_VERSION), CA ($FABRIC_CA_IMAGE_VERSION)"
   if [ -z "$FABRIC_IMAGE_VERSION" ] || [ -z "$FABRIC_CA_IMAGE_VERSION" ]; then
     echo "It seems some of the specified Fabric images are not available."

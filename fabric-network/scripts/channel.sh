@@ -112,7 +112,7 @@ function enroll_org_admin() {
   create_msp_config_yaml ${CA_NAME} ${CA_CERT_NAME} ${ORG_ADMIN_DIR}/msp
 
   # private keys are hashed by name, but we only support one enrollment.
-  # test-network examples refer to this as "server.key", which is incorrect.
+  # settlements-network examples refer to this as "server.key", which is incorrect.
   # This is the private key used to endorse transactions using the admin's
   # public key.
   mv ${ORG_ADMIN_DIR}/msp/keystore/*_sk ${ORG_ADMIN_DIR}/msp/keystore/key.pem
@@ -146,9 +146,9 @@ EOF
 function create_channel_MSP() {
   push_fn "Creating channel MSP"
 
-  create_channel_org_MSP sarb orderer $sarb_NS
-  create_channel_org_MSP absa peer $absa_NS
-  create_channel_org_MSP crossborder peer $crossborder_NS
+  create_channel_org_MSP sarb orderer $SARB_NS
+  create_channel_org_MSP absa peer $ABSA_NS
+  create_channel_org_MSP crossborder peer $CROSSBORDER_NS
 
   extract_orderer_tls_cert sarb orderer1
   extract_orderer_tls_cert sarb orderer2
@@ -189,7 +189,7 @@ function create_channel_org_MSP() {
 function extract_orderer_tls_cert() {
   local org=$1
   local orderer=$2
-  local ns=$sarb_NS
+  local ns=$SARB_NS
 
   echo "Extracting TLS cert for $org $orderer"
 

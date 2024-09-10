@@ -8,7 +8,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: absa-peer1-tls-cert
-  namespace: ${absa_NS}
+  namespace: ${ABSA_NS}
 spec:
   isCA: false
   privateKey:
@@ -17,7 +17,7 @@ spec:
   dnsNames:
     - localhost
     - absa-peer1
-    - absa-peer1.${absa_NS}.svc.cluster.local
+    - absa-peer1.${ABSA_NS}.svc.cluster.local
     - absa-peer1.${DOMAIN}
     - absa-peer-gateway-svc
     - absa-peer-gateway-svc.${DOMAIN}
@@ -46,7 +46,7 @@ data:
   CORE_PEER_CHAINCODELISTENADDRESS: 0.0.0.0:7052
   # bootstrap peer is the other peer in the same org
   CORE_PEER_GOSSIP_BOOTSTRAP: absa-peer2:7051
-  CORE_PEER_GOSSIP_EXTERNALENDPOINT: absa-peer1.${absa_NS}.svc.cluster.local:7051
+  CORE_PEER_GOSSIP_EXTERNALENDPOINT: absa-peer1.${ABSA_NS}.svc.cluster.local:7051
   CORE_PEER_LOCALMSPID: absaMSP
   CORE_PEER_MSPCONFIGPATH: /var/hyperledger/fabric/organizations/peerOrganizations/absa.example.com/peers/absa-peer1.absa.example.com/msp
   CORE_OPERATIONS_LISTENADDRESS: 0.0.0.0:9443

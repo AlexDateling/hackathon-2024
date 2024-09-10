@@ -8,7 +8,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: crossborder-peer2-tls-cert
-  namespace: ${crossborder_NS}
+  namespace: ${CROSSBORDER_NS}
 spec:
   isCA: false
   privateKey:
@@ -18,7 +18,7 @@ spec:
     - localhost
     - crossborder-peer2
     - crossborder-peer-gateway-svc
-    - crossborder-peer2.${crossborder_NS}.svc.cluster.local
+    - crossborder-peer2.${CROSSBORDER_NS}.svc.cluster.local
     - crossborder-peer2.${DOMAIN}
   ipAddresses:
     - 127.0.0.1
@@ -45,7 +45,7 @@ data:
   CORE_PEER_CHAINCODELISTENADDRESS: 0.0.0.0:7052
   # bootstrap peer is the other peer in the same org
   CORE_PEER_GOSSIP_BOOTSTRAP: crossborder-peer1:7051
-  CORE_PEER_GOSSIP_EXTERNALENDPOINT: crossborder-peer2.${crossborder_NS}.svc.cluster.local:7051
+  CORE_PEER_GOSSIP_EXTERNALENDPOINT: crossborder-peer2.${CROSSBORDER_NS}.svc.cluster.local:7051
   CORE_PEER_LOCALMSPID: crossborderMSP
   CORE_PEER_MSPCONFIGPATH: /var/hyperledger/fabric/organizations/peerOrganizations/crossborder.example.com/peers/crossborder-peer2.crossborder.example.com/msp
   CORE_OPERATIONS_LISTENADDRESS: 0.0.0.0:9443

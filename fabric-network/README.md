@@ -1,6 +1,6 @@
 # NApex Settlement Hyperlegder Fabric Network
 
-This project re-establishes the Hyperledger [test-network](../test-network) as a _cloud native_ application.
+This project re-establishes the Hyperledger [settlements-network](../settlements-network) as a _cloud native_ application.
 
 ## Prerequisites:
 
@@ -16,6 +16,7 @@ This project re-establishes the Hyperledger [test-network](../test-network) as a
 Create a KIND cluster:
 
 ```shell
+./network kind
 ./network cluster init
 ```
 

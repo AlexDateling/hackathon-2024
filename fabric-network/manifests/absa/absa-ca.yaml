@@ -16,7 +16,7 @@ spec:
   dnsNames:
     - localhost
     - absa-ca
-    - absa-ca.${absa_NS}.svc.cluster.local
+    - absa-ca.${ABSA_NS}.svc.cluster.local
     - absa-ca.${DOMAIN}
   ipAddresses:
     - 127.0.0.1

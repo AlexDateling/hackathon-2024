@@ -9,7 +9,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: sarb-orderer2-tls-cert
-  namespace: ${sarb_NS}
+  namespace: ${SARB_NS}
 spec:
   isCA: false
   privateKey:
@@ -18,7 +18,7 @@ spec:
   dnsNames:
     - localhost
     - sarb-orderer2
-    - sarb-orderer2.${sarb_NS}.svc.cluster.local
+    - sarb-orderer2.${SARB_NS}.svc.cluster.local
     - sarb-orderer2.${DOMAIN}
     - sarb-orderer2-admin.${DOMAIN}
   ipAddresses:
