@@ -1,7 +1,7 @@
-import { Bank, AccountDetails, Transaction, hashedAccountDetails, Payload } from '../models/transaction.model'; // Assume these are imported from your models file
-import crypto from 'crypto';
+import * as crypto from "crypto";
+import { AccountDetails, Bank, hashedAccountDetails, Payload, Transaction } from 'src/models/transaction.model';
 
-class MockTransaction {
+export class MockTransaction {
   private static bankCounter = 1;
   private static accountCounter = 1;
   private static transactionCounter = 1;
@@ -61,9 +61,9 @@ class MockTransaction {
 
   static generateHashedDetails(accountDetails: hashedAccountDetails): string {
     const jsonString = JSON.stringify(accountDetails);
-    const hash = crypto.createHash('sha256');
-    hash.update(jsonString);
-    return hash.digest('hex');
+    const hash = crypto.createHash('sha256').update(jsonString).digest('hex');
+    crypto.createHash('sha256')
+    return hash;
   }
 
   static createMockTransaction(): Transaction {
@@ -85,7 +85,3 @@ class MockTransaction {
     };
   }
 }
-
-// Example usage
-console.log(MockTransaction.createMockTransaction());
-console.log(MockTransaction.createMockPayload());
