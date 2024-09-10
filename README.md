@@ -68,6 +68,7 @@ Creates a new payment transaction.
 *Params*
     - clientid: ID of the client initiating the payment
 *Request Body*
+```
 {
     "amount": 0,
     "receiverdetails": {
@@ -81,6 +82,7 @@ Creates a new payment transaction.
         }
     }
 }
+```
 *Sample Request*
 ```
 curl -X 'POST' \
