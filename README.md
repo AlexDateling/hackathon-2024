@@ -134,7 +134,9 @@ curl -X 'POST' \
 2. **Get Transaction**
 Retrieves details of a specific transaction.
 
-*URL*: /transaction/{transactionid}/getTransaction
+<details>
+
+<summary>*URL*: /transaction/{transactionid}/getTransaction</summary>
 *Method*: GET
 *Params*
     - transactionid: ID of the transaction to retrieve
@@ -174,6 +176,7 @@ curl -X 'GET' \
   "receiverstatus": "PENDING"
 }
 ```
+</details>
 3. **Settle Payment**
 Settles the payment for a specific transaction.
 
