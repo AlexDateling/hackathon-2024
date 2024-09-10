@@ -60,7 +60,8 @@ The SADC Settlements Network enables banks in South Africa and other SADC countr
 
 ## API Sample Requests
 ## Endpoints
-1. **Create Payment**
+<details>
+<summary>1. **Create Payment**</summary>
 Creates a new payment transaction.
 
 *URL*: /transaction/{clientid}/createPayment
@@ -133,6 +134,7 @@ curl -X 'POST' \
   "receiverstatus": "PENDING"
 }
 ```
+</details>
 <details>
 <summary>2. **Get Transaction**</summary>
 Retrieves details of a specific transaction.
@@ -180,7 +182,8 @@ curl -X 'GET' \
 }
 ```
 </details>
-3. **Settle Payment**
+<details>
+<summary>3. **Settle Payment**</summary>
 Settles the payment for a specific transaction.
 
 *URL*: /transaction/{transactionid}/settlePayment
@@ -224,7 +227,9 @@ curl -X 'POST' \
   "receiverstatus": "PENDING"
 }
 ```
-4. **Settle Receive**
+</details>
+<details>
+<summary>4. **Settle Receive**</summary>
 Settles the receiving end of a specific transaction.
 
 *URL*: /transaction/{transactionid}/settleReceive
@@ -268,7 +273,9 @@ curl -X 'POST' \
   "receiverstatus": "SETTLED"
 }
 ```
-5. **Get All Transactions**
+</details>
+<details>
+<summary>5. **Get All Transactions**</summary>
 Retrieves all transactions for a specific bank.
 
 *URL*: /transaction/all
@@ -340,6 +347,7 @@ curl -X 'GET' \
   }
 ]
 ```
+</details>
 ## Contact
 
 Proudly Brought to you by Team **NApex**
