@@ -46,7 +46,7 @@ context SARB_NS                       ${NS}
 context ABSA_NS                       ${NS}
 context CROSSBORDER_NS                ${NS}
 context DOMAIN                        localho.st
-context CHANNEL_NAME                  settlements-channel
+context CHANNEL_NAME                  settlementschannel
 context ORDERER_TIMEOUT               10s                   # see https://github.com/hyperledger/fabric/issues/3372
 context TEMP_DIR                      ${PWD}/build
 context CHAINCODE_BUILDER             ccaas                 # see https://github.com/hyperledgendary/fabric-builder-k8s/blob/main/docs/TEST_NETWORK_K8S.md

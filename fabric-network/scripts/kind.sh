@@ -40,6 +40,9 @@ nodes:
       - containerPort: 443
         hostPort: ${ingress_https_port}
         protocol: TCP
+  - role: worker
+  - role: worker
+  - role: worker
 #networking:
 #  kubeProxyMode: "ipvs"
 

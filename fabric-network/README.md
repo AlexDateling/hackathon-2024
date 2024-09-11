@@ -27,7 +27,7 @@ Launch the network, create a channel, and deploy the [settlements-chaincode](../
 
 ./network channel create
 
-./network chaincode deploy settlements-chaincode ../settlements-chaincode/chaincode-go
+./network chaincode deploy settlements-chaincode ../settlements-chaincode
 
 ```
 

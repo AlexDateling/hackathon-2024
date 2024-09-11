@@ -24,7 +24,7 @@ function channel_command_group() {
 
 function channel_up() {
 
-  register_org_admins
+#   register_org_admins
   enroll_org_admins
 
   create_channel_MSP
@@ -203,6 +203,8 @@ function extract_orderer_tls_cert() {
 }
 
 function create_genesis_block() {
+
+  echo "Channel name ${CHANNEL_NAME}"
   push_fn "Creating channel genesis block"
   cat ${PWD}/config/sarb/configtx-template.yaml | envsubst > ${TEMP_DIR}/configtx.yaml
   FABRIC_CFG_PATH=${TEMP_DIR} \
@@ -246,7 +248,7 @@ function join_channel_orderer() {
 }
 
 function join_channel_peers() {
-  join_org_peers absa
+#   join_org_peers absa
   join_org_peers crossborder
 }
 
