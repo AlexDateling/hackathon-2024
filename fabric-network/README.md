@@ -37,3 +37,5 @@ Invoke and query chaincode:
 ./network chaincode invoke settlements-chaincode '{"Args":["InitLedger"]}'
 ./network chaincode query  settlements-chaincode '{"Args":["SettleReceiveTransactions","bankID"]}'
 ```
+
+./network chaincode query settlements-chaincode '{"Args":["chaincodefunction","json"]}'

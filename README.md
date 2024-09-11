@@ -1,4 +1,4 @@
-# NApex Settlements/Payment Fabric Network
+# NApex Settlements/Payment Fabric Networks
 
 ## Overview
 
@@ -382,3 +382,62 @@ Contributors:
 - Mluleki Phemelo Ndala
 - Alex Dateling
 - Hannah Foster
+
+
+Prototype Video
+    - running the transaction
+        - create
+        - get
+        - settle receivement
+        - settle payment
+
+    - make better MockData
+    - ensure transactions have hashes
+        - hash payment make it a new field "paymenthash"
+        - used to verify
+    - create a new functionm that verifies transaction
+        - checksum
+
+Settlement Model
+
+{
+            transaction_id: "1725575573618alexsid9845543456653834",
+             Senderbankdetails: {
+                    bankid: "ABSA645334",
+                    name: "ABSA",
+                    country: "ZAR",
+                },
+            Receiverbankdetails: {
+                    bankid: "BANKID12345",
+                    name: "ABank",
+                    country: "RSA",
+                },
+            status: "PENDING",
+            clientstatus: "PENDING",
+            receiverstatus: "PENDING",
+        },
+
+
+
+HASH this
+            client_details: {
+                name: "Alex",
+                surname: "Dateling",
+                accountnumber: "0000000000",
+                bankdetails: {
+                    bankid: "ABSA645334",
+                    name: "ABSA",
+                    country: "ZAR",
+                },
+            },
+            receiver_details: {
+                name: "NotAlex1",
+                surname: "ASurname123",
+                accountnumber: "9845543456",
+                bankdetails: {
+                    bankid: "BANKID12345",
+                    name: "ABank",
+                    country: "RSA",
+                },
+            },
+            amount: 2000,

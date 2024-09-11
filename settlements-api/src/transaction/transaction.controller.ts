@@ -16,6 +16,13 @@ export class TransactionController {
     createTransaction(@Body() Payload: Payload, @Param('clientid') clientid: string) {
       return this.transactionService.createTransaction(Payload, clientid);
     }
+    
+    @Get('/generateMock')
+    @ApiOperation({ summary: 'gets the Transaction details for the transactionid provided.' })
+    generatemock() {
+      return this.transactionService.generatemock();
+    }
+
 
     @Get(':transactionid/getTransaction')
     @ApiOperation({ summary: 'gets the Transaction details for the transactionid provided.' })
