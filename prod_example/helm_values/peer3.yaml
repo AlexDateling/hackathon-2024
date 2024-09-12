@@ -1,0 +1,32 @@
+image:
+  tag: 1.3.0
+
+spec:
+  volumes:
+  - name: peer3
+    persistentVolumeClaim:
+      claimName: fabric-main
+
+peer:
+  databaseType: CouchDB
+  couchdbInstance: cdb-peer1
+  mspID: PEPSIMSP
+
+secrets:
+  peer:
+    cert: hlf--pepsi-idcert
+    key: hlf--pepsi-idkey
+    caCert: hlf--peer-ca-cert
+  channel: hlf--channel
+  adminCert: hlf--peer-admincert
+  adminKey: hlf--peer-adminkey
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: hlf-peer

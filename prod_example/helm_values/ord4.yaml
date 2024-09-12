@@ -1,0 +1,30 @@
+image:
+  tag: 1.3.0
+
+spec:
+  volumes:
+  - name: ord4
+    persistentVolumeClaim:
+      claimName: fabric-main
+
+ord:
+  type: kafka
+  mspID: PNPMSP
+
+secrets:
+  ord:
+    cert: hlf--pnp-idcert
+    key: hlf--pnp-idkey
+    caCert: hlf--ord-ca-cert
+  genesis: hlf--genesis
+  adminCert: hlf--ord-admincert
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: hlf-ord

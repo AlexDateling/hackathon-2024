@@ -1,0 +1,18 @@
+image:
+  tag: 0.4.10
+
+spec:
+  volumes:
+  - name: cdb-peer2
+    persistentVolumeClaim:
+      claimName: fabric-main
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: hlf-couchdb

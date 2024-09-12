@@ -1,0 +1,55 @@
+image:
+  tag: 1.3.0
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+  path: /
+  hosts:
+    - ca.identitatem.co.za
+  tls:
+    - secretName: ca--tls
+      hosts:
+        - ca.identitatem.co.za
+
+spec:
+  volumes:
+  - name: cdb-peer1
+    persistentVolumeClaim:
+      claimName: fabric-main
+
+caName: ca
+
+postgresql:
+  enabled: true
+
+config:
+  hlfToolsVersion: 1.3.0
+  csr:
+    names:
+      c: SA
+      st: Gauteng
+      l:
+      o: "DataXchange"
+      ou: Blockchain
+  affiliations:
+    aidtech: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: hlf-ca
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchLabels:
+          app: postgresql
+          release: ca
+      topologyKey: "kubernetes.io/hostname"
